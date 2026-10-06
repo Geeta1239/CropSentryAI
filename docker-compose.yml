@@ -1,0 +1,26 @@
+services:
+    db:
+        image: postgres:16-alpine
+        environment:
+            POSTGRES_DB: cropsentry
+            POSTGRES_USER: cropsentry
+            POSTGRES_PASSWORD: cropsentry
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+    api:
+        build: ./backend
+        env_file: ./backend/.env
+        environment:
+            DATABASE_URL: postgres://cropsentry:cropsentry@db:5432/cropsentry
+            CORS_ORIGIN: http://localhost:8000
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./backend:/app
+            - /app/node_modules
+        depends_on:
+            - db
+volumes:
+    postgres_data:

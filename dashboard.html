@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Command Dashboard | CropSentry AI</title>
+    <meta name="description" content="Personalized farm crop monitoring center with diagnostic history, regional disease risk map, and AI agronomy alerts.">
+
+    <!-- Leaflet Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon-box">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                </div>
+                CropSentry<span>AI</span>
+            </a>
+
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="predict.html">Predict</a>
+                <a href="how-it-works.html">How It Works</a>
+                <a href="disease.html">Diseases</a>
+                <a href="dashboard.html" class="active">Dashboard</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <div id="userNavBadge"></div>
+
+                <!-- Theme Toggle -->
+                <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode" title="Toggle Theme">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+
+                <select id="langSelect" class="lang-select" aria-label="Select Language">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी</option>
+                    <option value="mr">मराठी</option>
+                </select>
+
+                <a href="predict.html" class="btn-primary btn-sm">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                    Scan Leaf
+                </a>
+
+                <button id="authBtn" class="btn-secondary btn-sm">Login</button>
+                <button id="mobileNavToggle" class="mobile-toggle" aria-label="Toggle navigation menu">
+                    <svg class="icon icon-lg" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileDrawer" class="mobile-drawer">
+        <a href="index.html">Home</a>
+        <a href="predict.html">Predict Disease</a>
+        <a href="how-it-works.html">How It Works</a>
+        <a href="disease.html">Diseases Encyclopedia</a>
+        <a href="dashboard.html" class="active">Farmer Dashboard</a>
+        <a href="admin.html">Admin Console</a>
+        <a href="about.html">About Project</a>
+        <a href="contact.html">Farmer Support</a>
+        <a href="login.html">Login / Register</a>
+    </div>
+
+    <!-- ================= DASHBOARD HEADER ================= -->
+    <section class="page-header">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; text-align: left;">
+                <div>
+                    <span class="badge brand" style="margin-bottom: 8px;">Farmer Operations Center</span>
+                    <h1 style="font-size: 2.3rem; margin-bottom: 6px;">Welcome Back, Ramesh Patel 👋</h1>
+                    <p style="font-size: 0.95rem;">Wardha Cluster, Maharashtra | Field Station #04</p>
+                </div>
+
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                    <a href="predict.html" class="btn-gold">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                        Scan New Leaf
+                    </a>
+                    <a href="disease.html" class="btn-secondary">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg>
+                        Pathology Catalog
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= DASHBOARD CONTENT ================= -->
+    <div class="container" style="margin-top: 10px;">
+
+        <!-- AI Alert Banner -->
+        <div style="background: var(--bg-surface-glass); backdrop-filter: var(--glass-blur); border-left: 4px solid var(--severity-high); padding: 20px 24px; border-radius: var(--radius-lg); margin-bottom: 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--severity-high-bg); color: var(--severity-high); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+                <div>
+                    <h4 style="color: var(--severity-high); font-size: 1rem; margin-bottom: 2px;">Critical Agronomic Advisory</h4>
+                    <p style="font-size: 0.875rem;">High ambient humidity (&gt;78%) detected in Wardha district. Bacterial Blight secondary infection risk is elevated for next 5 days.</p>
+                </div>
+            </div>
+            <a href="predict.html" class="btn-primary btn-sm" style="background: #dc2626;">Test Leaf Symptoms</a>
+        </div>
+
+        <!-- KPI Metrics Grid -->
+        <div class="dashboard-grid">
+            <div class="kpi-card">
+                <div class="kpi-icon-wrap">
+                    <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div class="kpi-info">
+                    <span>Total Scans Logged</span>
+                    <h3>18</h3>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-icon-wrap" style="background: var(--severity-med-bg); color: var(--severity-med);">
+                    <svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                </div>
+                <div class="kpi-info">
+                    <span>Active Pathogens</span>
+                    <h3>2</h3>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-icon-wrap" style="background: var(--primary-mint); color: var(--primary);">
+                    <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                </div>
+                <div class="kpi-info" style="width: 100%;">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                        <span>Crop Health Index</span>
+                        <strong style="color: var(--primary); font-size: 1.1rem;">82%</strong>
+                    </div>
+                    <div class="progress-track" style="margin-top: 8px;">
+                        <div class="progress-fill" style="width: 82%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-icon-wrap" style="background: #e0f2fe; color: #0284c7;">
+                    <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+                </div>
+                <div class="kpi-info">
+                    <span>Field Microclimate</span>
+                    <h3 style="font-size: 1.35rem; color: #0284c7;">31.5°C | 78%</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Crop Recommendations Card -->
+        <div style="background: var(--bg-surface-glass); backdrop-filter: var(--glass-blur); padding: 28px; border-radius: var(--radius-xl); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); margin: 30px 0;">
+            <h3 style="font-size: 1.3rem; color: var(--text-main); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.93V17a1 1 0 0 1-2 0v-.07A7 7 0 1 1 19 12a1 1 0 0 1-2 0 5 5 0 1 0-4 4.93z"/></svg>
+                Autonomous AI Agronomy Recommendations
+            </h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                <div style="background: var(--primary-ultralight); padding: 16px; border-radius: var(--radius-md); border-left: 3px solid var(--primary);">
+                    <strong style="color: var(--primary); font-size: 0.95rem;">Foliar Fungicide Schedule</strong>
+                    <p style="font-size: 0.875rem; margin-top: 4px;">Schedule Copper Oxychloride 50 WP spray within next 3 days prior to forecast monsoon shower.</p>
+                </div>
+                <div style="background: var(--accent-gold-light); padding: 16px; border-radius: var(--radius-md); border-left: 3px solid var(--accent-gold);">
+                    <strong style="color: var(--accent-gold-hover); font-size: 0.95rem;">Irrigation Adjustment</strong>
+                    <p style="font-size: 0.875rem; margin-top: 4px;">Pause overhead sprinkler irrigation; switch to furrow or drip to keep leaf canopy dry.</p>
+                </div>
+                <div style="background: var(--primary-mint); padding: 16px; border-radius: var(--radius-md); border-left: 3px solid var(--primary-light);">
+                    <strong style="color: var(--primary); font-size: 0.95rem;">Bio-Control Enrichment</strong>
+                    <p style="font-size: 0.875rem; margin-top: 4px;">Top-dress root zones with Trichoderma enriched FYM to fortify plant vascular defense.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Regional Disease Risk Map -->
+        <section id="mapSection" class="map-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                <div>
+                    <h3 style="font-size: 1.3rem; color: var(--text-main);">🌍 Regional Crop Health Map</h3>
+                    <p style="font-size: 0.9rem;">Regional crop-health overview for supported crops.</p>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <span class="badge high">🔴 High Risk Zone</span>
+                    <span class="badge medium">🟠 Medium Risk</span>
+                    <span class="badge low">🟢 Low Risk / Healthy</span>
+                </div>
+            </div>
+
+            <div id="map"></div>
+        </section>
+
+        <!-- Diagnostic History Data Table -->
+        <section class="table-card">
+            <div class="table-header-bar">
+                <div>
+                    <h3 style="font-size: 1.3rem; color: var(--text-main);">Diagnostic Scan History</h3>
+                    <p style="font-size: 0.9rem;">Historical classification records and downloadable laboratory reports.</p>
+                </div>
+                <a href="predict.html" class="btn-primary btn-sm">
+                    <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    New Diagnosis
+                </a>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Scan Date</th>
+                        <th>Sample Reference</th>
+                        <th>Pathogen Detected</th>
+                        <th>Confidence</th>
+                        <th>Severity</th>
+                        <th>Remediation Status</th>
+                        <th>Report</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>26 Aug 2026</strong></td>
+                        <td>Leaf_Sample_084.jpg</td>
+                        <td><strong>Bacterial Blight</strong></td>
+                        <td>94.8%</td>
+                        <td><span class="badge high">High</span></td>
+                        <td><span style="color: var(--accent-gold); font-weight: 600;">Action Required</span></td>
+                        <td>
+                            <button onclick="downloadReport('Bacterial Blight', '26 Aug 2026')" class="btn-secondary btn-sm">PDF</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>18 Aug 2026</strong></td>
+                        <td>FieldB_Sector2.jpg</td>
+                        <td><strong>Fusarium Wilt</strong></td>
+                        <td>91.2%</td>
+                        <td><span class="badge medium">Medium</span></td>
+                        <td><span style="color: var(--primary); font-weight: 600;">Treated</span></td>
+                        <td>
+                            <button onclick="downloadReport('Fusarium Wilt', '18 Aug 2026')" class="btn-secondary btn-sm">PDF</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>05 Aug 2026</strong></td>
+                        <td>Reference_Healthy.jpg</td>
+                        <td><strong>Healthy Foliage</strong></td>
+                        <td>98.6%</td>
+                        <td><span class="badge low">Low / Healthy</span></td>
+                        <td><span style="color: var(--primary); font-weight: 600;">Optimal</span></td>
+                        <td>
+                            <button onclick="downloadReport('Healthy Foliage', '05 Aug 2026')" class="btn-secondary btn-sm">PDF</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>🌿 CropSentry AI</h3>
+                    <p>Leaf classification for the supported bell pepper, potato, and tomato classes.</p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="predict.html">Predict Disease</a></li>
+                        <li><a href="how-it-works.html">How It Works</a></li>
+                        <li><a href="disease.html">Model Classes</a></li>
+                        <li><a href="dashboard.html">Farmer Dashboard</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Features</h4>
+                    <ul class="footer-links">
+                        <li><a href="predict.html">AI Disease Detection</a></li>
+                        <li><a href="predict.html">Classify a Leaf</a></li>
+                        <li><a href="predict.html#compareSection">Healthy vs Diseased</a></li>
+                        <li><a href="dashboard.html#mapSection">Risk Heatmap</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Contact Support</h4>
+                    <p style="font-size: 0.9rem;">📍 India</p>
+                    <p style="font-size: 0.9rem;">📧 <a href="contact.html#contactForm">Contact support</a></p>
+                    <p style="font-size: 0.9rem;">📞 Toll-Free Helpline: 1800-XXX-XXXX</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2026 CropSentry AI | Built for Farmers 🌱 | Hackathon Project 🚀</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const mapEl = document.getElementById('map');
+            if (mapEl) {
+                const map = L.map('map').setView([20.5937, 78.9629], 5); // India center
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(map);
+
+                // High Risk - Vidarbha / Maharashtra (Bacterial Blight outbreak)
+                L.circle([20.7453, 78.6022], {
+                    color: '#dc2626',
+                    fillColor: '#dc2626',
+                    fillOpacity: 0.45,
+                    radius: 70000
+                }).addTo(map).bindPopup("<strong>Vidarbha Cluster</strong><br>⚠️ High Bacterial Blight Alert (78% Humidity)");
+
+                // Medium-risk regional example
+                L.circle([22.2587, 71.1924], {
+                    color: '#d97706',
+                    fillColor: '#d97706',
+                    fillOpacity: 0.4,
+                    radius: 65000
+                }).addTo(map).bindPopup("<strong>Saurashtra Cluster</strong><br>🟠 Moderate Leaf Curl Virus vector pressure");
+
+                // Low Risk - Telangana Cluster (Healthy)
+                L.circle([17.3850, 78.4867], {
+                    color: '#16a34a',
+                    fillColor: '#16a34a',
+                    fillOpacity: 0.35,
+                    radius: 50000
+                }).addTo(map).bindPopup("<strong>Telangana Cluster</strong><br>🟢 Normal crop health index (88% Healthy)");
+            }
+        });
+    </script>
+
+    <!-- Scripts -->
+    <script src="api.js"></script>
+    <script src="auth.js"></script>
+    <script>requireAuth();</script>
+    <script src="login.js"></script>
+    <script src="main.js"></script>
+    <script src="motion-effects.js"></script>
+    <script src="chatbot.js"></script>
+</body>
+
+</html>

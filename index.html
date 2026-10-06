@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CropSentry AI | Plant Leaf Classification</title>
+    <meta name="description" content="Classify bell pepper, potato, and tomato leaves with CropSentry AI's trained MobileNetV2 model.">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Three.js CDN for 3D Bio-Neural Visualizer -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon-box">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                </div>
+                CropSentry<span>AI</span>
+            </a>
+
+            <nav class="nav-links">
+                <a href="index.html" class="active">Home</a>
+                <a href="predict.html">Predict</a>
+                <a href="how-it-works.html">How It Works</a>
+                <a href="disease.html">Diseases</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <div id="userNavBadge"></div>
+                
+                <!-- Dark/Light Theme Toggle -->
+                <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode" title="Toggle Theme">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+
+                <select id="langSelect" class="lang-select" aria-label="Select Language">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी</option>
+                    <option value="mr">मराठी</option>
+                </select>
+
+                <a href="predict.html" class="btn-primary btn-sm">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                    Scan Leaf
+                </a>
+                
+                <button id="authBtn" class="btn-secondary btn-sm">Login</button>
+
+                <button id="mobileNavToggle" class="mobile-toggle" aria-label="Toggle navigation menu">
+                    <svg class="icon icon-lg" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileDrawer" class="mobile-drawer">
+        <a href="index.html" class="active">Home</a>
+        <a href="predict.html">Predict Disease</a>
+        <a href="how-it-works.html">How It Works</a>
+        <a href="disease.html">Diseases Encyclopedia</a>
+        <a href="dashboard.html">Farmer Dashboard</a>
+        <a href="admin.html">Admin Console</a>
+        <a href="about.html">About Project</a>
+        <a href="contact.html">Farmer Support</a>
+        <a href="login.html">Login / Register</a>
+    </div>
+
+    <!-- ================= HERO SECTION WITH 3D CANVAS ================= -->
+    <section class="hero">
+        <div id="hero3dCanvas" class="hero-3d-bg"></div>
+
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <div class="hero-tag">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        MobileNetV2 • TensorFlow Lite
+                    </div>
+
+                    <h1 id="heroMainTitle">
+                        CropSentry AI: <span>Plant Leaf Classification</span>
+                    </h1>
+
+                    <p id="heroMainDesc">
+                        Classify leaf images from bell pepper, potato, and tomato. Review the top-three model classes and their scores; the model does not estimate severity or recommend treatments.
+                    </p>
+
+                    <div class="hero-buttons">
+                        <a href="predict.html" class="btn-primary">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            Upload Leaf Image
+                        </a>
+                        <a href="how-it-works.html" class="btn-secondary">
+                            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                            Model Details
+                        </a>
+                    </div>
+
+                    <div class="hero-stats">
+                        <div class="hero-stat-item">
+                            <strong>86.29%</strong>
+                            <span>Held-out Test Accuracy</span>
+                        </div>
+                        <div class="hero-stat-item">
+                            <strong>15</strong>
+                            <span>Trained Classes</span>
+                        </div>
+                        <div class="hero-stat-item">
+                            <strong>3</strong>
+                            <span>Supported Crops</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Hero 3D Tilt Upload Card -->
+                <div class="hero-upload-card">
+                    <span class="badge brand" style="margin-bottom: 12px;">Trained leaf classifier</span>
+                    <h3>Classify a Leaf Image</h3>
+                    <p style="font-size: 0.9rem; margin-top: 4px;">Upload a clear bell pepper, potato, or tomato leaf photo.</p>
+
+                    <div class="upload-dropzone" onclick="window.location.href='predict.html'">
+                        <div class="upload-icon-circle">
+                            <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                        </div>
+                        <h4>Choose a Leaf Photo</h4>
+                        <span>Supports JPG, PNG, WEBP (Max 10MB)</span>
+                    </div>
+
+                    <a href="predict.html" class="btn-gold" style="width: 100%; border-radius: var(--radius-md); padding: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                        <svg class="icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        Launch Prediction Studio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FEATURES ================= -->
+    <section class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge brand">Intelligent Agronomy</span>
+                <h2>CropSentry Model at a Glance</h2>
+                <p>A local TensorFlow Lite image classifier with a documented held-out test evaluation.</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <h3>Measured Test Performance</h3>
+                    <p>The saved report records 86.29% accuracy on 3,101 held-out test images. Recall varies by class; Tomato Early Blight recall was 39.3%.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg class="icon icon-lg" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    </div>
+                    <h3>MobileNetV2 + TFLite</h3>
+                    <p>Leaf photos are resized and classified locally through the model-backed CropSentry API.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M10 2v7.31M14 9.3V1.99M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0"/></svg>
+                    </div>
+                    <h3>15 Supported Classes</h3>
+                    <p>Classifies 12 disease or pest conditions and 3 healthy classes across bell pepper, potato, and tomato.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+                    </div>
+                    <h3>Top-Three Scores</h3>
+                    <p>Each prediction includes the three highest class scores. Scores are not calibrated diagnostic certainty.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= WORKFLOW / HOW IT WORKS ================= -->
+    <section class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge brand">Simple 3-Step Flow</span>
+                <h2>How Leaf Classification Works</h2>
+                <p>Upload a supported leaf image and review the classifier's output.</p>
+            </div>
+
+            <div class="steps-timeline">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h4>Capture Leaf Image</h4>
+                    <p>Choose a clear image of a bell pepper, potato, or tomato leaf.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h4>Deep Neural Analysis</h4>
+                    <p>The MobileNetV2 TensorFlow Lite model returns its top predicted classes and scores.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h4>Review the Result</h4>
+                    <p>Compare the top-three classes. Consult an agricultural expert for diagnosis or treatment advice.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= USE CASES ================= -->
+    <section class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge brand">Ecosystem Impact</span>
+                <h2>Built for the Entire Agri-Value Chain</h2>
+                <p>Empowering individual smallholders, research scholars, and large-scale agricultural enterprises.</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+                    </div>
+                    <h3>Supported Crops</h3>
+                    <p>Explore the PlantVillage classes available for bell pepper, potato, and tomato in the prediction studio.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    </div>
+                    <h3>Agriculture Students</h3>
+                    <p>Interactive study tool for understanding foliar pathogen symptomology and computer vision applications in modern precision farming.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg class="icon icon-lg" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    </div>
+                    <h3>Agri-Enterprises</h3>
+                    <p>Monitor farm cluster health, assess regional disease hotspots, and deploy targeted bio-inputs efficiently across contracted growers.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    </div>
+                    <h3>Agronomy Researchers</h3>
+                    <p>Review the model's supported classes, held-out evaluation, and per-class recall information.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FLOWING CTA BANNER CARD ================= -->
+    <section class="section-padding" style="padding-top: 20px;">
+        <div class="container">
+            <div style="background: var(--bg-surface-glass); backdrop-filter: var(--glass-blur); border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: 60px 30px; text-align: center; box-shadow: var(--shadow-lg); position: relative; overflow: hidden;">
+                <div style="position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; background: radial-gradient(ellipse at center, var(--primary-mint) 0%, transparent 70%); pointer-events: none;"></div>
+                
+                <span class="badge brand" style="margin-bottom: 16px;">100% Free & Open-Access</span>
+                <h2 style="font-size: 2.4rem; color: var(--text-main); margin-bottom: 14px;">Explore the Supported Leaf Classes</h2>
+                <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 680px; margin: 0 auto 30px;">See which bell pepper, potato, and tomato leaf classes the trained model can classify.</p>
+                
+                <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+                    <a href="predict.html" class="btn-gold" style="padding: 14px 32px; font-size: 1.05rem; font-weight: 700; border-radius: var(--radius-full);">
+                        <svg class="icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        Open Prediction Studio
+                    </a>
+                    <a href="dashboard.html" class="btn-secondary" style="padding: 14px 28px;">
+                        <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                        View Field Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>🌿 CropSentry AI</h3>
+                    <p>A MobileNetV2 image classifier for supported bell pepper, potato, and tomato leaf classes.</p>
+                    <div class="footer-social-links">
+                        <a href="#" class="social-icon-btn" aria-label="Website"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></a>
+                        <a href="#" class="social-icon-btn" aria-label="Twitter"><svg class="icon" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+                        <a href="#" class="social-icon-btn" aria-label="GitHub"><svg class="icon" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="predict.html">Predict Disease</a></li>
+                        <li><a href="how-it-works.html">How It Works</a></li>
+                        <li><a href="disease.html">Model Classes</a></li>
+                        <li><a href="dashboard.html">Farmer Dashboard</a></li>
+                        <li><a href="admin.html">Admin Console</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>AI Capabilities</h4>
+                    <ul class="footer-links">
+                        <li><a href="predict.html">Single Leaf Classification</a></li>
+                        <li><a href="predict.html#compareSection">Comparative Leaf Analysis</a></li>
+                        <li><a href="disease.html">Supported Classes and Recall</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Support & Contact</h4>
+                    <p style="font-size: 0.9rem; margin-bottom: 8px;">📍 Dedicated Farmer Helpline, India</p>
+                    <p style="font-size: 0.9rem; margin-bottom: 8px;">📧 <a href="contact.html#contactForm">Contact support</a></p>
+                    <p style="font-size: 0.9rem; margin-bottom: 16px;">📞 Toll-Free: 1800-XXX-XXXX</p>
+                    <a href="contact.html" class="btn-secondary btn-sm" style="background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.2);">Get Farmer Support</a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2026 CropSentry AI | Built for Farmers 🌱 | Empowering Agriculture with AI 🚀</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="api.js"></script>
+    <script src="login.js"></script>
+    <script src="main.js"></script>
+    <script src="motion-effects.js"></script>
+    <script src="hero3d.js"></script>
+    <script src="chatbot.js"></script>
+</body>
+
+</html>

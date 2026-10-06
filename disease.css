@@ -1,0 +1,16 @@
+/* ==========================================================================
+   CropSentry AI - DISEASE ENCYCLOPEDIA STYLES
+   Inherits Master Design System from style.css
+   ========================================================================== */
+
+@import url('style.css');
+
+/* Disease specific micro-adjustments */
+.disease-page-highlight {
+    background: var(--bg-surface-glass);
+    backdrop-filter: var(--glass-blur);
+    border-radius: var(--radius-xl);
+    padding: 30px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 30px;
+}

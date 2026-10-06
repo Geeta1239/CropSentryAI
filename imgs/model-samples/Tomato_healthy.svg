@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-labelledby="title desc">
+    <title id="title">Illustration of a healthy tomato leaf</title>
+    <desc id="desc">A stylized green tomato leaf, illustrating the healthy class label only.</desc>
+    <defs>
+        <linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#75bd57"/>
+            <stop offset="1" stop-color="#176344"/>
+        </linearGradient>
+        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#e5f3da"/>
+            <stop offset="1" stop-color="#9dbf88"/>
+        </linearGradient>
+    </defs>
+    <rect width="480" height="320" fill="url(#bg)"/>
+    <path d="M240 285C218 250 151 259 137 224c-5-14 8-23 23-20-38-33-42-70-14-83 13-6 24 2 31 14 2-39 22-62 48-50 13 6 15 20 11 34 23-36 54-45 71-24 8 11 4 25-6 38 36-20 65-12 67 15 1 14-11 24-27 30 41-2 64 17 52 42-7 14-23 18-40 15 27 22 28 47 5 57-13 6-28-2-40-14-7 25-24 39-44 29-12-6-16-19-13-33-13 21-30 29-43 10Z" fill="url(#leaf)" stroke="#245b38" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M240 280c2-68 6-131 35-194M241 235l-63-79m60 48 87-68m-92 100-80 4m86-36 100 23m-98 3-50 64m61-74 56 80" fill="none" stroke="#c7e6a0" stroke-width="5" stroke-linecap="round" opacity=".9"/>
+</svg>

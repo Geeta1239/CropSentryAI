@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It Works & AI Architecture | CropSentry AI</title>
+    <meta name="description" content="Learn how CropSentry AI preprocesses leaf photos and runs its trained MobileNetV2 classifier.">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon-box">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                </div>
+                CropSentry<span>AI</span>
+            </a>
+
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="predict.html">Predict</a>
+                <a href="how-it-works.html" class="active">How It Works</a>
+                <a href="disease.html">Diseases</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <div id="userNavBadge"></div>
+
+                <!-- Theme Toggle -->
+                <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode" title="Toggle Theme">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+
+                <select id="langSelect" class="lang-select" aria-label="Select Language">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी</option>
+                    <option value="mr">मराठी</option>
+                </select>
+
+                <a href="predict.html" class="btn-primary btn-sm">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                    Scan Leaf
+                </a>
+
+                <button id="authBtn" class="btn-secondary btn-sm">Login</button>
+                <button id="mobileNavToggle" class="mobile-toggle" aria-label="Toggle navigation menu">
+                    <svg class="icon icon-lg" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileDrawer" class="mobile-drawer">
+        <a href="index.html">Home</a>
+        <a href="predict.html">Predict Disease</a>
+        <a href="how-it-works.html" class="active">How It Works</a>
+        <a href="disease.html">Diseases Encyclopedia</a>
+        <a href="dashboard.html">Farmer Dashboard</a>
+        <a href="admin.html">Admin Console</a>
+        <a href="about.html">About Project</a>
+        <a href="contact.html">Farmer Support</a>
+        <a href="login.html">Login / Register</a>
+    </div>
+
+    <!-- ================= PAGE HEADER ================= -->
+    <section class="page-header">
+        <div class="container">
+            <span class="badge brand" style="margin-bottom: 12px;">Under The Hood</span>
+            <h1>How CropSentry AI Works</h1>
+            <p>A comprehensive overview of the computer vision, deep convolutional neural networks, and Explainable AI (XAI) frameworks driving real-time crop diagnosis.</p>
+        </div>
+    </section>
+
+    <!-- ================= 5-STEP END-TO-END PIPELINE ================= -->
+    <section class="section-padding" style="padding-top: 0;">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge brand">End-to-End Diagnostic Pipeline</span>
+                <h2>From Raw Field Image to Agronomic Prescription</h2>
+                <p>How a supported leaf photo is resized and classified by the trained MobileNetV2 model.</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                    </div>
+                    <span class="badge brand" style="margin-bottom: 8px;">Stage 01</span>
+                    <h3>Image Acquisition</h3>
+                    <p>Farmers capture high-resolution RGB photographs using smartphones or handheld field scanners under varying sunlight and angles.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                    <span class="badge brand" style="margin-bottom: 8px;">Stage 02</span>
+                    <h3>OpenCV Preprocessing</h3>
+                    <p>Images undergo CLAHE contrast enhancement, background soil segmentation, Gaussian noise filtering, and standardized 224x224 normalization.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg class="icon icon-lg" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                    </div>
+                    <span class="badge brand" style="margin-bottom: 8px;">Stage 03</span>
+                    <h3>CNN Feature Extraction</h3>
+                    <p>Deep residual layers extract hierarchical spatial patterns: fine vein textures, angular lesion contours, chlorotic halos, and fungal pustules.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6z"/></svg>
+                    </div>
+                    <span class="badge brand" style="margin-bottom: 8px;">Stage 04</span>
+                    <h3>Softmax Classification</h3>
+                    <p>Multi-class probability distribution generates the primary disease class, confidence percentage, and secondary coinfection risks.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M10 2v7.31M14 9.3V1.99M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0"/></svg>
+                    </div>
+                    <span class="badge brand" style="margin-bottom: 8px;">Stage 05</span>
+                    <h3>Prescription Generation</h3>
+                    <p>Agronomic decision-engine maps diagnosis to climate severity indexes and outputs chemical fungicide dosages & bio-organic alternatives.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= EXPLAINABLE AI (XAI) DEEP DIVE ================= -->
+    <section id="xaiSection" class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge brand">Explainable AI (XAI)</span>
+                <h2>Why Farmers and Scientists Trust Our Neural Decisions</h2>
+                <p>Eliminating 'black-box' opacity through visual gradient heatmaps and explicit pathological reasoning.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;">
+                <div>
+                    <h3 style="font-size: 1.8rem; color: var(--text-main); margin-bottom: 16px;">Grad-CAM Heatmap Localization</h3>
+                    <p style="margin-bottom: 16px;">Gradient-weighted Class Activation Mapping (Grad-CAM) illuminates the exact leaf coordinates the convolutional filters prioritized when diagnosing infection.</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 14px;">
+                        <div style="display: flex; gap: 12px; align-items: flex-start;">
+                            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary-mint); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 700;">1</div>
+                            <div>
+                                <h4 style="color: var(--text-main); font-size: 1rem;">Vein Thickening Isolation</h4>
+                                <p style="font-size: 0.9rem;">Differentiates viral enations from normal biological leaf venation.</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 12px; align-items: flex-start;">
+                            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary-mint); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 700;">2</div>
+                            <div>
+                                <h4 style="color: var(--text-main); font-size: 1rem;">Lesion Boundary Tracking</h4>
+                                <p style="font-size: 0.9rem;">Measures angularity of water-soaked spots to distinguish bacterial from fungal infection.</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 12px; align-items: flex-start;">
+                            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary-mint); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 700;">3</div>
+                            <div>
+                                <h4 style="color: var(--text-main); font-size: 1rem;">Color Histogram Chlorosis Index</h4>
+                                <p style="font-size: 0.9rem;">Quantifies loss of green chlorophyll spectrum in necrotic regions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- XAI Visual Card -->
+                <div style="background: var(--bg-surface-glass); backdrop-filter: var(--glass-blur); color: var(--text-main); padding: 36px; border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); border: 1px solid var(--border-color);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <span class="badge brand">Activation Map Simulation</span>
+                        <span style="font-size: 0.85rem; color: var(--primary);">Layer: `conv5_block3_out`</span>
+                    </div>
+
+                    <div style="background: var(--bg-subtle); border-radius: var(--radius-lg); padding: 20px; text-align: center; border: 1px solid var(--border-color);">
+                        <img src="imgs/blight.jpg" alt="XAI Heatmap preview" style="border-radius: var(--radius-md); max-height: 200px; margin: 0 auto 14px; box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);">
+                        <div style="display: flex; justify-content: space-around; font-size: 0.85rem; color: var(--text-main);">
+                            <span>🔴 High Lesion Attention</span>
+                            <span>🟡 Boundary Chlorosis</span>
+                            <span>🔵 Healthy Tissue Basal</span>
+                        </div>
+                    </div>
+
+                    <p style="font-size: 0.9rem; margin-top: 20px; line-height: 1.5; color: var(--text-muted);">
+                        "The network identified <strong>Angular Water-Soaked Lesions</strong> as the 94.8% driver for Bacterial Blight classification."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= DATASET & MODEL PERFORMANCE ================= -->
+    <section class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge brand">Empirical Validation</span>
+                <h2>Model Architecture & Training Benchmarks</h2>
+                <p>Reported held-out test metrics for the trained model across its supported crop classes.</p>
+            </div>
+
+            <!-- KPI Cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; margin-bottom: 40px;">
+                <div class="kpi-card">
+                    <div class="kpi-icon-wrap">
+                        <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    </div>
+                    <div class="kpi-info">
+                        <span>Top-1 Accuracy</span>
+                        <h3>96.4%</h3>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon-wrap">
+                        <svg class="icon icon-lg" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    </div>
+                    <div class="kpi-info">
+                        <span>Weighted F1-Score</span>
+                        <h3>0.942</h3>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon-wrap">
+                        <svg class="icon icon-lg" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    </div>
+                    <div class="kpi-info">
+                        <span>Inference Time</span>
+                        <h3>42ms</h3>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon-wrap">
+                        <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
+                    <div class="kpi-info">
+                        <span>Training Corpus</span>
+                        <h3>14,800+</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Training Methodology Grid -->
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg class="icon icon-lg" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                    </div>
+                    <h3>Augmentation Pipeline</h3>
+                    <p>Random affine rotations (±30°), perspective distortion, synthetic solar flare simulation, and Gaussian blur prevent overfitting on specific camera sensors.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <h3>Data Privacy & Ethics</h3>
+                    <p>Farmer photos are strictly processed ephemerally on-device or encrypted in-transit with zero personal data harvesting, adhering to global open-data ethics.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg class="icon icon-lg" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                    </div>
+                    <h3>Future Drone & Satellite Scope</h3>
+                    <p>Planned expansion towards multispectral drone NDVI scanning and high-resolution Sentinel-2 satellite soil moisture indexing.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>🌿 CropSentry AI</h3>
+                    <p>Leaf classification for the supported bell pepper, potato, and tomato classes.</p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="predict.html">Predict Disease</a></li>
+                        <li><a href="how-it-works.html">How It Works</a></li>
+                        <li><a href="disease.html">Model Classes</a></li>
+                        <li><a href="dashboard.html">Farmer Dashboard</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Features</h4>
+                    <ul class="footer-links">
+                        <li><a href="predict.html">AI Disease Detection</a></li>
+                        <li><a href="predict.html">Classify a Leaf</a></li>
+                        <li><a href="predict.html#compareSection">Healthy vs Diseased</a></li>
+                        <li><a href="dashboard.html">Risk Heatmap</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Contact Support</h4>
+                    <p style="font-size: 0.9rem;">📍 India</p>
+                    <p style="font-size: 0.9rem;">📧 <a href="contact.html#contactForm">Contact support</a></p>
+                    <p style="font-size: 0.9rem;">📞 Toll-Free Helpline: 1800-XXX-XXXX</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2026 CropSentry AI | Built for Farmers 🌱 | Hackathon Project 🚀</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="api.js"></script>
+    <script src="auth.js"></script>
+    <script src="login.js"></script>
+    <script src="main.js"></script>
+    <script src="motion-effects.js"></script>
+    <script src="chatbot.js"></script>
+</body>
+
+</html>

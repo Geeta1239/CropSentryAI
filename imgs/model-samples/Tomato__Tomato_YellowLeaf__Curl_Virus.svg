@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-labelledby="title desc">
+    <title id="title">Illustration of a curled tomato leaf</title>
+    <desc id="desc">A stylized yellow-green tomato leaf with curled edges, illustrating the class label only.</desc>
+    <defs>
+        <linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#d9ed76"/>
+            <stop offset="1" stop-color="#4e8b36"/>
+        </linearGradient>
+        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#e5f3da"/>
+            <stop offset="1" stop-color="#9dbf88"/>
+        </linearGradient>
+    </defs>
+    <rect width="480" height="320" fill="url(#bg)"/>
+    <path d="M240 280C211 234 140 246 125 208c-5-14 9-21 25-16-40-36-44-75-14-87 13-5 23 4 29 16 2-42 23-65 49-51 12 7 14 22 9 36 24-38 55-47 72-25 8 11 3 27-7 40 38-21 69-12 70 16 1 15-12 25-28 31 43-3 67 18 54 44-7 14-24 18-42 15 29 24 29 51 5 61-14 6-30-3-42-16-8 28-26 42-47 31-12-7-16-20-13-35-14 22-31 32-45 12Z" fill="url(#leaf)" stroke="#356c32" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M239 275c2-67 6-131 35-194M241 234l-63-79m59 48 88-68m-92 100-82 4m87-36 102 24m-99 3-51 65m63-75 57 83" fill="none" stroke="#e9f2ae" stroke-width="5" stroke-linecap="round" opacity=".85"/>
+    <path d="M128 191c-14-19-9-38 9-42 17-4 29 8 27 24m-10-68c5-19 21-28 35-18 14 10 13 27 0 38m103-28c18-12 36-7 39 10 3 16-9 28-26 26m54 52c21-1 33 12 25 27-7 14-24 17-37 6" fill="none" stroke="#f4f4c1" stroke-width="8" stroke-linecap="round"/>
+</svg>

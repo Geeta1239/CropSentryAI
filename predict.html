@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Disease Prediction | CropSentry AI</title>
+    <meta name="description" content="Classify pepper, potato, and tomato leaf images with CropSentry's MobileNetV2 model.">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon-box">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                </div>
+                CropSentry<span>AI</span>
+            </a>
+
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="predict.html" class="active">Predict</a>
+                <a href="how-it-works.html">How It Works</a>
+                <a href="disease.html">Diseases</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <div id="userNavBadge"></div>
+
+                <!-- Theme Toggle -->
+                <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode" title="Toggle Theme">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+
+                <select id="langSelect" class="lang-select" aria-label="Select Language">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी</option>
+                    <option value="mr">मराठी</option>
+                </select>
+
+                <a href="predict.html" class="btn-primary btn-sm">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                    Scan Leaf
+                </a>
+
+                <button id="authBtn" class="btn-secondary btn-sm">Login</button>
+                <button id="mobileNavToggle" class="mobile-toggle" aria-label="Toggle navigation menu">
+                    <svg class="icon icon-lg" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileDrawer" class="mobile-drawer">
+        <a href="index.html">Home</a>
+        <a href="predict.html" class="active">Predict Disease</a>
+        <a href="how-it-works.html">How It Works</a>
+        <a href="disease.html">Diseases Encyclopedia</a>
+        <a href="dashboard.html">Farmer Dashboard</a>
+        <a href="admin.html">Admin Console</a>
+        <a href="about.html">About Project</a>
+        <a href="contact.html">Farmer Support</a>
+        <a href="login.html">Login / Register</a>
+    </div>
+
+    <!-- ================= PAGE HEADER ================= -->
+    <section class="page-header">
+        <div class="container">
+            <span class="badge brand" style="margin-bottom: 12px;">Neural Vision Studio</span>
+            <h1>Plant Leaf Classifier</h1>
+            <p>Upload a pepper, potato, or tomato leaf image. The trained MobileNetV2 model returns its top class predictions and scores.</p>
+        </div>
+    </section>
+
+    <!-- ================= PREDICTION STUDIO ================= -->
+    <section class="section-padding" style="padding-top: 0;">
+        <div class="container">
+            
+            <div class="predict-layout">
+                
+                <!-- Left Column: Upload & Laser Scan -->
+                <div class="predict-upload-pane">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <h3>Upload a Leaf Image</h3>
+                        <span id="modelInputBadge" class="badge brand">Loading model info</span>
+                    </div>
+                    <p id="supportedCropText" style="font-size: 0.9rem; margin-bottom: 20px;">Supported crops: loading model classes…</p>
+
+                    <input type="file" id="imageInput" accept="image/jpeg,image/png,image/webp" style="display: none;">
+
+                    <!-- Interactive Drag & Drop Box -->
+                    <div id="predictDropzone" class="upload-dropzone">
+                        <div class="upload-icon-circle">
+                            <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                        </div>
+                        <h4>Click to Browse or Drag Leaf Image</h4>
+                        <span>JPG, PNG, or WEBP · up to 10 MB</span>
+                    </div>
+
+                    <!-- Image Preview with Laser Scanner -->
+                    <div id="previewContainer" class="preview-container">
+                        <img id="previewImage" src="" alt="Uploaded leaf preview">
+                        <div id="laserScan" class="laser-scan"></div>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; margin-top: 20px;">
+                        <button id="analyzeBtn" class="btn-primary" style="flex: 1;">
+                            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6z"/></svg>
+                            Analyze Image
+                        </button>
+                        <button onclick="resetUpload()" class="btn-secondary" style="padding: 12px 18px;" title="Reset Upload">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                        </button>
+                    </div>
+
+                    <div class="model-facts">
+                        <span>Test accuracy</span>
+                        <strong id="modelAccuracy">Loading…</strong>
+                        <span id="modelEvaluationNote">Reported on the held-out test set</span>
+                    </div>
+                </div>
+
+                <!-- Right Column: AI Diagnostic Results -->
+                <div class="predict-result-pane">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <h3>Model Results</h3>
+                        <span id="modelClassCount" class="badge brand">15 classes</span>
+                    </div>
+
+                    <!-- Placeholder before analysis -->
+                    <div id="resultPlaceholder" style="text-align: center; padding: 60px 20px; color: var(--text-subtle);">
+                        <svg class="icon icon-xl" style="color: var(--primary-light); margin-bottom: 16px;" viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        <h4 style="color: var(--text-main); margin-bottom: 6px;">Ready to classify</h4>
+                        <p style="font-size: 0.9rem;">Upload a supported leaf image to see the model's most likely class and its top-three scores.</p>
+                    </div>
+
+                    <!-- Result Box (Revealed on analysis) -->
+                    <div id="resultBox" class="result-box">
+                        <div class="result-header">
+                            <div>
+                                <span id="classTypeBadge" class="badge brand">Model class</span>
+                                <h2 class="result-disease-name" style="margin-top: 6px;">Prediction</h2>
+                                <p id="resultCrop" style="font-size: 0.85rem; color: var(--text-muted);"></p>
+                            </div>
+                        </div>
+
+                        <!-- Confidence Bar -->
+                        <div class="confidence-bar-wrap">
+                            <div class="confidence-labels">
+                                <span>Top-class score</span>
+                                <span id="confidenceText" style="color: var(--primary); font-weight: 700;">0%</span>
+                            </div>
+                            <div class="progress-track">
+                                <div id="confidenceProgress" class="progress-fill" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <p id="confidenceWarning" class="model-evaluation-warning" hidden>
+                            The top-class score is below the model's low-score threshold. Try a clear, well-lit close-up image; the score is not calibrated diagnostic certainty.
+                        </p>
+
+                        <div class="top-predictions">
+                            <h4>Top model predictions</h4>
+                            <div id="topPredictions" aria-live="polite"></div>
+                        </div>
+
+                        <p class="model-disclaimer">Scores are the model's class probabilities, not a diagnosis certainty. This model does not estimate severity or prescribe treatments.</p>
+
+                        <!-- Explainable AI (XAI) -->
+                        <div id="xaiMarkers" hidden style="margin-top: 20px;">
+                            <h4 style="font-size: 0.95rem; color: var(--text-main); display: flex; align-items: center; gap: 6px;">
+                                <svg class="icon" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.93V17a1 1 0 0 1-2 0v-.07A7 7 0 1 1 19 12a1 1 0 0 1-2 0 5 5 0 1 0-4 4.93z"/></svg>
+                                Explainable AI (XAI) Key Markers
+                            </h4>
+                            <div class="xai-chips">
+                                <span class="xai-chip">Angular Water-Soaked Lesions</span>
+                                <span class="xai-chip">Vein Discoloration</span>
+                                <span class="xai-chip">Chlorotic Halo Margin</span>
+                            </div>
+                        </div>
+
+                        <!-- Dual Treatment Plan (Tabs) -->
+                        <div class="treatment-card" hidden>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <h4 style="color: var(--text-main);">Recommended Treatments</h4>
+                                <div class="treatment-tabs">
+                                    <button class="tab-btn active" onclick="switchTreatmentTab('chemical')">Chemical</button>
+                                    <button class="tab-btn" onclick="switchTreatmentTab('organic')">Organic Bio</button>
+                                </div>
+                            </div>
+
+                            <ul id="chemicalTreatments" class="treatment-list">
+                                <li>
+                                    <svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                                    <span>Spray <strong>Copper Oxychloride 50 WP</strong> @ 2.5g per litre of water.</span>
+                                </li>
+                                <li>
+                                    <svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                                    <span>Add <strong>Streptocycline</strong> @ 0.1g per litre for severe foliar blighting.</span>
+                                </li>
+                                <li>
+                                    <svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                                    <span>Repeat spray at 10-12 day intervals if high humidity persists.</span>
+                                </li>
+                            </ul>
+
+                            <ul id="organicTreatments" class="treatment-list" style="display: none;">
+                                <li>
+                                    <svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                                    <span>Apply <strong>Neem Seed Kernel Extract (NSKE 5%)</strong> foliar spray.</span>
+                                </li>
+                                <li>
+                                    <svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                                    <span>Soil application of <em>Pseudomonas fluorescens</em> @ 2.5 kg/ha with FYM.</span>
+                                </li>
+                                <li>
+                                    <svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                                    <span>Avoid overhead sprinkler irrigation to prevent raindrop splash spread.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ================= 7-DAY FUTURE RISK & WEATHER ================= -->
+            <div class="risk-grid" hidden>
+                <!-- 7-Day Forecast Risk -->
+                <div id="futureRisk" class="risk-widget" style="display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <h4>
+                            <svg class="icon" style="color: var(--accent-gold);" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            7-Day Secondary Infection Probability
+                        </h4>
+                        <span class="badge medium">Warning</span>
+                    </div>
+                    <p style="font-size: 0.9rem;">Predictive risk of <strong>Leaf Curl Virus / Fungal Spread</strong> in next 7 days based on local conditions:</p>
+                    
+                    <div class="confidence-bar-wrap" style="margin: 14px 0;">
+                        <div class="confidence-labels">
+                            <span>Outbreak Probability</span>
+                            <strong style="color: var(--accent-gold);">63.2%</strong>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" style="width: 63.2%; background: linear-gradient(90deg, #f59e0b, #dc2626);"></div>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.85rem; color: #b45309; background: var(--accent-gold-light); padding: 8px 12px; border-radius: var(--radius-sm);">
+                        🌱 Preventative bio-fungicide spraying advised before spore dissemination.
+                    </p>
+                </div>
+
+                <!-- Weather Risk Telemetry -->
+                <div id="weatherRisk" class="risk-widget" style="display: none;">
+                    <h4>
+                        <svg class="icon" style="color: var(--primary);" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+                        Microclimate Infection Drivers
+                    </h4>
+                    <p style="font-size: 0.9rem;">Current field weather metrics favoring bacterial spore proliferation:</p>
+                    <div class="weather-stats">
+                        <div class="weather-box">
+                            <span>Humidity</span>
+                            <strong>78%</strong>
+                        </div>
+                        <div class="weather-box">
+                            <span>Temperature</span>
+                            <strong>31.5°C</strong>
+                        </div>
+                        <div class="weather-box">
+                            <span>Rainfall</span>
+                            <strong>Expected</strong>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--severity-high); margin-top: 12px;">
+                        ⚠️ High humidity (&gt;75%) accelerates Bacterial Blight lesion growth.
+                    </p>
+                </div>
+            </div>
+
+            <section class="model-classes-section" aria-labelledby="modelClassesHeading">
+                <div class="section-header">
+                    <span class="badge brand">Model coverage</span>
+                    <h2 id="modelClassesHeading">What the model can classify</h2>
+                    <p>These are the trained model's 15 classes: 12 disease or pest conditions and 3 healthy classes across bell pepper, potato, and tomato.</p>
+                </div>
+                <div id="classEvaluationWarning" class="model-evaluation-warning" hidden></div>
+                <div id="supportedClasses" class="model-class-groups" aria-live="polite">
+                    <p>Loading trained class labels…</p>
+                </div>
+            </section>
+
+            <!-- ================= COMPARATIVE LEAF ANALYSIS MODULE ================= -->
+            <div id="compareSection" class="compare-container">
+                <div class="section-header" style="margin-bottom: 24px;">
+                    <span class="badge brand">Two-image comparison</span>
+                    <h2>Compare Leaf Classifications</h2>
+                    <p>Run the trained model on two images and compare their predicted classes and class scores. This is not a pixel-level or severity analysis.</p>
+                </div>
+
+                <div class="compare-grid">
+                    <div class="compare-col">
+                        <label for="healthyInput" style="font-weight: 700; color: var(--primary);">Image A</label>
+                        <input type="file" id="healthyInput" accept="image/jpeg,image/png,image/webp" class="form-control" style="margin-top: 10px;">
+                        <img id="healthyPreview" alt="Preview of image A" style="display: none;">
+                    </div>
+
+                    <div class="compare-col">
+                        <label for="diseasedInput" style="font-weight: 700; color: var(--severity-high);">Image B</label>
+                        <input type="file" id="diseasedInput" accept="image/jpeg,image/png,image/webp" class="form-control" style="margin-top: 10px;">
+                        <img id="diseasedPreview" alt="Preview of image B" style="display: none;">
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 24px;">
+                    <button id="compareBtn" class="btn-primary" style="padding: 14px 36px; font-weight: 700;">
+                        <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        Compare Both Images
+                    </button>
+                </div>
+
+                <!-- Comparison Result Box -->
+                <div id="compareResult" class="compare-result" hidden aria-live="polite">
+                    <h4>Prediction comparison</h4>
+                    <div class="compare-result-grid">
+                        <div><span>Image A</span><strong id="comparisonClassA"></strong><small id="comparisonScoreA"></small></div>
+                        <div><span>Image B</span><strong id="comparisonClassB"></strong><small id="comparisonScoreB"></small></div>
+                    </div>
+                    <p id="comparisonSummary"></p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>🌿 CropSentry AI</h3>
+                    <p>AI-assisted leaf classification with a trained MobileNetV2 model.</p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="predict.html">Predict Disease</a></li>
+                        <li><a href="how-it-works.html">How It Works</a></li>
+                        <li><a href="disease.html">Model Classes</a></li>
+                        <li><a href="dashboard.html">Farmer Dashboard</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Features</h4>
+                    <ul class="footer-links">
+                        <li><a href="predict.html">AI Disease Detection</a></li>
+                        <li><a href="predict.html">Supported crop classes</a></li>
+                        <li><a href="#compareSection">Compare predictions</a></li>
+                        <li><a href="dashboard.html">Farmer Dashboard</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Contact Support</h4>
+                    <p style="font-size: 0.9rem;">📍 India</p>
+                    <p style="font-size: 0.9rem;">📧 <a href="contact.html#contactForm">Contact support</a></p>
+                    <p style="font-size: 0.9rem;">📞 Toll-Free Helpline: 1800-XXX-XXXX</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2026 CropSentry AI | Built for Farmers 🌱 | Hackathon Project 🚀</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="api.js"></script>
+    <script src="auth.js"></script>
+    <script src="login.js"></script>
+    <script src="main.js"></script>
+    <script src="motion-effects.js"></script>
+    <script src="chatbot.js"></script>
+</body>
+
+</html>

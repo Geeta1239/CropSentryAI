@@ -1,0 +1,29 @@
+/* ==========================================================================
+   CropSentry AI - LOGIN / AUTH PORTAL STYLES
+   Inherits Master Design System from style.css
+   ========================================================================== */
+
+@import url('style.css');
+
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    background: transparent;
+}
+
+.auth-card-body {
+    margin-top: 24px;
+    text-align: left;
+}
+
+.demo-credentials-box {
+    margin-top: 20px;
+    padding: 14px;
+    background: var(--bg-subtle);
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}

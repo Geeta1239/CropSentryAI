@@ -1,0 +1,10 @@
+@"
+.venv/
+venv/
+env/
+backend/.venv/
+
+*.zip
+__pycache__/
+*.pyc
+"@ | Out-File -Encoding utf8 .gitignore

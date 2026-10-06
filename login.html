@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication Portal | CropSentry AI</title>
+    <meta name="description" content="Secure login portal for farmers and agronomy administrators to access personal crop monitoring dashboards.">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="login.css">
+</head>
+
+<body>
+
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            
+            <!-- Top Controls (Home + Theme) -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon-box">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                    </div>
+                    CropSentry<span>AI</span>
+                </a>
+
+                <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode" title="Toggle Theme">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+            </div>
+
+            <h2 id="authHeading" style="font-size: 1.6rem; color: var(--text-main); margin-bottom: 4px;">Welcome to CropSentry</h2>
+            <p id="authSubheading" style="font-size: 0.9rem; color: var(--text-muted);">Access your crop diagnostics and surveillance dashboard.</p>
+
+            <!-- Mode Switcher (Sign In vs Register) -->
+            <div class="role-switcher" style="margin-bottom: 12px;">
+                <button type="button" class="role-tab active" id="tabSignIn" onclick="setAuthMode('login')">🔑 Sign In</button>
+                <button type="button" class="role-tab" id="tabRegister" onclick="setAuthMode('register')">✨ Create Account</button>
+            </div>
+
+            <!-- Role Switcher (Farmer vs Admin) -->
+            <div class="role-switcher" id="roleSelectorWrap">
+                <button type="button" class="role-tab active" data-role="farmer">🌾 Farmer Portal</button>
+                <button type="button" class="role-tab" data-role="admin">🔬 Agronomist Admin</button>
+            </div>
+
+            <form id="authForm" onsubmit="handleAuthSubmit(event)">
+                <div class="form-group" id="nameGroup" style="text-align: left; display: none;">
+                    <label for="fullName" style="font-size: 0.85rem; font-weight: 600; color: var(--text-main); margin-bottom: 6px;">Full Name</label>
+                    <input type="text" id="fullName" class="form-control" placeholder="e.g. Ramesh Patel" autocomplete="name">
+                </div>
+
+                <div class="form-group" style="text-align: left;">
+                    <label for="username" style="font-size: 0.85rem; font-weight: 600; color: var(--text-main); margin-bottom: 6px;">Email address</label>
+                    <input type="email" id="username" class="form-control" placeholder="you@example.com" required autocomplete="email">
+                </div>
+
+                <div class="form-group" style="text-align: left;">
+                    <label for="password" style="font-size: 0.85rem; font-weight: 600; color: var(--text-main); margin-bottom: 6px;">Password</label>
+                    <input type="password" id="password" class="form-control" placeholder="Enter password (min 8 characters)" required autocomplete="current-password">
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn-primary" style="width: 100%; padding: 13px; font-weight: 700; border-radius: var(--radius-md); margin-top: 10px;">
+                    Log In to Dashboard
+                </button>
+            </form>
+
+            <!-- Demo Quick Fill Buttons -->
+            <div class="demo-credentials-box" id="demoBox">
+                <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 8px;">⚡ 1-Click Instant Demo Login:</span>
+                <div style="display: flex; gap: 8px;">
+                    <button type="button" onclick="fillDemoFarmer()" class="btn-secondary btn-sm" style="flex: 1; font-size: 0.775rem; padding: 6px 10px;">
+                        🌾 Login as Farmer
+                    </button>
+                    <button type="button" onclick="fillDemoAdmin()" class="btn-secondary btn-sm" style="flex: 1; font-size: 0.775rem; padding: 6px 10px;">
+                        🔬 Login as Admin
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-color);">
+                <a href="index.html" style="font-size: 0.9rem; font-weight: 600; color: var(--primary); display: inline-flex; align-items: center; gap: 6px;">
+                    <svg class="icon" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                    Back to Home Page
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="api.js"></script>
+    <script src="login.js"></script>
+    <script src="main.js"></script>
+    <script src="motion-effects.js"></script>
+</body>
+
+</html>

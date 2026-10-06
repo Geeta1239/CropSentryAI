@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin & Agronomist Console | CropSentry AI</title>
+    <meta name="description" content="Centralized system administration and model monitoring console for CropSentry AI.">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon-box">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                </div>
+                CropSentry<span>AI</span>
+            </a>
+
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="predict.html">Predict</a>
+                <a href="how-it-works.html">How It Works</a>
+                <a href="disease.html">Diseases</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <div id="userNavBadge">
+                    <span class="badge high">Admin Mode</span>
+                </div>
+
+                <!-- Theme Toggle -->
+                <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode" title="Toggle Theme">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+
+                <select id="langSelect" class="lang-select" aria-label="Select Language">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी</option>
+                    <option value="mr">मराठी</option>
+                </select>
+
+                <a href="predict.html" class="btn-primary btn-sm">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                    Scan Leaf
+                </a>
+
+                <button id="authBtn" class="btn-secondary btn-sm">Logout</button>
+                <button id="mobileNavToggle" class="mobile-toggle" aria-label="Toggle navigation menu">
+                    <svg class="icon icon-lg" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileDrawer" class="mobile-drawer">
+        <a href="index.html">Home</a>
+        <a href="predict.html">Predict Disease</a>
+        <a href="how-it-works.html">How It Works</a>
+        <a href="disease.html">Diseases Encyclopedia</a>
+        <a href="dashboard.html">Farmer Dashboard</a>
+        <a href="admin.html" class="active">Admin Console</a>
+        <a href="about.html">About Project</a>
+        <a href="contact.html">Farmer Support</a>
+        <a href="login.html">Login / Register</a>
+    </div>
+
+    <!-- ================= ADMIN HEADER ================= -->
+    <section class="page-header">
+        <div class="container">
+            <span class="badge brand" style="margin-bottom: 12px;">Agronomy Operations Console</span>
+            <h1>Centralized System Administration & Model Telemetry</h1>
+            <p>Monitor inference traffic, manage retraining datasets, inspect classification drift, and manage agronomist user permissions.</p>
+        </div>
+    </section>
+
+    <!-- ================= ADMIN CONTENT ================= -->
+    <div class="container" style="margin-top: 10px;">
+
+        <!-- Admin KPI Metrics -->
+        <div class="dashboard-grid">
+            <div class="kpi-card">
+                <div class="kpi-icon-wrap">
+                    <svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+                </div>
+                <div class="kpi-info">
+                    <span>Registered Farmers</span>
+                    <h3>2,480</h3>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-icon-wrap" style="background: var(--primary-mint); color: var(--primary);">
+                    <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div class="kpi-info">
+                    <span>Total Scans Served</span>
+                    <h3>15,842</h3>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-icon-wrap" style="background: #e0f2fe; color: #0284c7;">
+                    <svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div class="kpi-info">
+                    <span>Model Validation</span>
+                    <h3>96.4%</h3>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-icon-wrap" style="background: var(--severity-med-bg); color: var(--severity-med);">
+                    <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg>
+                </div>
+                <div class="kpi-info">
+                    <span>Pathogens Supported</span>
+                    <h3>8 Classes</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Tools Grid -->
+        <div class="feature-grid" style="margin: 30px 0;">
+            <div class="feature-card">
+                <div class="feature-icon-box">
+                    <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                </div>
+                <h3>Dataset Ingestion</h3>
+                <p>Upload and annotate leaf images from the supported bell pepper, potato, and tomato classes for dataset review.</p>
+                <button onclick="triggerAdminAction('Dataset Ingestion Modal')" class="btn-primary btn-sm" style="margin-top: 16px;">
+                    Upload Dataset Batch
+                </button>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon-box">
+                    <svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6z"/></svg>
+                </div>
+                <h3>Model Retraining Engine</h3>
+                <p>Inspect loss convergence curves, confusion matrix precision/recall breakdown, and trigger overnight weights fine-tuning.</p>
+                <button onclick="triggerAdminAction('Model Retraining Telemetry')" class="btn-primary btn-sm" style="margin-top: 16px;">
+                    Launch Training Job
+                </button>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon-box">
+                    <svg class="icon icon-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                </div>
+                <h3>Agronomic Thresholds</h3>
+                <p>Adjust weather pathogen severity triggers, notification dispatch intervals, and emergency agronomist routing protocols.</p>
+                <button onclick="triggerAdminAction('Settings Configuration')" class="btn-primary btn-sm" style="margin-top: 16px;">
+                    System Settings
+                </button>
+            </div>
+        </div>
+
+        <!-- Real-Time Activity Table -->
+        <section class="table-card">
+            <div class="table-header-bar">
+                <div>
+                    <h3 style="font-size: 1.3rem; color: var(--text-main);">Live Inbound Diagnosis Stream</h3>
+                    <p style="font-size: 0.9rem;">Recent leaf-classification requests recorded by the application.</p>
+                </div>
+                <span class="badge low">🟢 Live Telemetry Stream</span>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>User Identifier</th>
+                        <th>Location Cluster</th>
+                        <th>Predicted Pathogen</th>
+                        <th>Confidence</th>
+                        <th>Latency</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Just Now (16:21)</strong></td>
+                        <td>Farmer_Vidarbha_104</td>
+                        <td>Wardha, MH</td>
+                        <td><span class="badge high">Bacterial Blight</span></td>
+                        <td><strong>95.4%</strong></td>
+                        <td>38ms</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3 mins ago</strong></td>
+                        <td>Farmer_Gujarat_089</td>
+                        <td>Rajkot, GJ</td>
+                        <td><span class="badge high">Leaf Curl Virus</span></td>
+                        <td><strong>93.8%</strong></td>
+                        <td>42ms</td>
+                    </tr>
+                    <tr>
+                        <td><strong>12 mins ago</strong></td>
+                        <td>Agri_Officer_Telangana</td>
+                        <td>Warangal, TS</td>
+                        <td><span class="badge medium">Fusarium Wilt</span></td>
+                        <td><strong>91.0%</strong></td>
+                        <td>45ms</td>
+                    </tr>
+                    <tr>
+                        <td><strong>25 mins ago</strong></td>
+                        <td>Farmer_Punjab_012</td>
+                        <td>Bathinda, PB</td>
+                        <td><span class="badge low">Healthy Leaf</span></td>
+                        <td><strong>98.9%</strong></td>
+                        <td>35ms</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>🌿 CropSentry AI</h3>
+                    <p>Leaf classification for the supported bell pepper, potato, and tomato classes.</p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="predict.html">Predict Disease</a></li>
+                        <li><a href="how-it-works.html">How It Works</a></li>
+                        <li><a href="disease.html">Model Classes</a></li>
+                        <li><a href="dashboard.html">Farmer Dashboard</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Features</h4>
+                    <ul class="footer-links">
+                        <li><a href="predict.html">AI Disease Detection</a></li>
+                        <li><a href="predict.html">Classify a Leaf</a></li>
+                        <li><a href="predict.html#compareSection">Healthy vs Diseased</a></li>
+                        <li><a href="dashboard.html">Risk Heatmap</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Contact Support</h4>
+                    <p style="font-size: 0.9rem;">📍 India</p>
+                    <p style="font-size: 0.9rem;">📧 <a href="contact.html#contactForm">Contact support</a></p>
+                    <p style="font-size: 0.9rem;">📞 Toll-Free Helpline: 1800-XXX-XXXX</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2026 CropSentry AI | Built for Farmers 🌱 | Hackathon Project 🚀</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="api.js"></script>
+    <script src="auth.js"></script>
+    <script>requireAuth("login.html", "admin");</script>
+    <script src="login.js"></script>
+    <script src="main.js"></script>
+    <script src="motion-effects.js"></script>
+    <script src="chatbot.js"></script>
+</body>
+
+</html>

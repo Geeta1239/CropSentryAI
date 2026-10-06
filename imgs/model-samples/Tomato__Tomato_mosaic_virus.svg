@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-labelledby="title desc">
+    <title id="title">Illustration of a mottled tomato leaf</title>
+    <desc id="desc">A stylized green tomato leaf with mosaic-like patches, illustrating the class label only.</desc>
+    <defs>
+        <linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#a6c85e"/>
+            <stop offset="1" stop-color="#39764a"/>
+        </linearGradient>
+        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#e5f3da"/>
+            <stop offset="1" stop-color="#9dbf88"/>
+        </linearGradient>
+    </defs>
+    <rect width="480" height="320" fill="url(#bg)"/>
+    <path d="M240 282C216 247 148 258 135 222c-5-14 7-23 23-20-37-32-42-69-14-82 13-6 24 2 31 14 1-39 21-62 47-50 13 6 16 20 12 34 23-35 53-45 70-24 8 11 5 25-5 38 35-20 64-12 66 14 1 15-11 25-26 31 40-3 63 16 51 41-6 14-22 18-39 16 26 21 27 46 5 56-13 6-28-2-40-14-8 25-24 39-44 29-12-6-16-19-13-32-14 20-30 28-43 9Z" fill="url(#leaf)" stroke="#356c32" stroke-width="5" stroke-linejoin="round"/>
+    <path d="m176 154 31-19 19 21-26 24zm74-39 27 8-4 27-28-5zm-92 67 31-9 13 24-30 13zm76 5 30-17 20 22-30 21zm58 21 29-6 14 23-28 13zm-42 48 28-17 17 20-24 20z" fill="#d5d96c" opacity=".85"/>
+    <path d="M240 278c2-67 6-129 34-190M241 234l-62-78m59 48 86-67m-91 99-79 4m85-36 99 23m-97 3-50 63m61-73 55 79" fill="none" stroke="#e4efae" stroke-width="5" stroke-linecap="round" opacity=".85"/>
+</svg>

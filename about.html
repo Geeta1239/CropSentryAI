@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About CropSentry AI | Mission & Technology</title>
+    <meta name="description" content="Learn about CropSentry AI, its agricultural mission, and the trained leaf-classification model.">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon-box">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                </div>
+                CropSentry<span>AI</span>
+            </a>
+
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="predict.html">Predict</a>
+                <a href="how-it-works.html">How It Works</a>
+                <a href="disease.html">Diseases</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="about.html" class="active">About</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <div id="userNavBadge"></div>
+
+                <!-- Theme Toggle -->
+                <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode" title="Toggle Theme">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+
+                <select id="langSelect" class="lang-select" aria-label="Select Language">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी</option>
+                    <option value="mr">मराठी</option>
+                </select>
+
+                <a href="predict.html" class="btn-primary btn-sm">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                    Scan Leaf
+                </a>
+
+                <button id="authBtn" class="btn-secondary btn-sm">Login</button>
+                <button id="mobileNavToggle" class="mobile-toggle" aria-label="Toggle navigation menu">
+                    <svg class="icon icon-lg" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileDrawer" class="mobile-drawer">
+        <a href="index.html">Home</a>
+        <a href="predict.html">Predict Disease</a>
+        <a href="how-it-works.html">How It Works</a>
+        <a href="disease.html">Diseases Encyclopedia</a>
+        <a href="dashboard.html">Farmer Dashboard</a>
+        <a href="admin.html">Admin Console</a>
+        <a href="about.html" class="active">About Project</a>
+        <a href="contact.html">Farmer Support</a>
+        <a href="login.html">Login / Register</a>
+    </div>
+
+    <!-- ================= PAGE HEADER ================= -->
+    <section class="page-header">
+        <div class="container">
+            <span class="badge brand" style="margin-bottom: 12px;">Agronomy + Artificial Intelligence</span>
+            <h1>Accessible AI for Plant Health</h1>
+            <p>CropSentry AI provides an accessible image classifier for bell pepper, potato, and tomato leaf classes.</p>
+        </div>
+    </section>
+
+    <!-- ================= MISSION & PROBLEM/SOLUTION ================= -->
+    <section class="section-padding" style="padding-top: 0;">
+        <div class="container">
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; margin-bottom: 60px;">
+                <div>
+                    <span class="badge brand" style="margin-bottom: 12px;">Our Driving Purpose</span>
+                    <h2 style="font-size: 2.2rem; color: var(--text-main); margin-bottom: 18px;">Making Leaf Classification Accessible</h2>
+                    <p style="font-size: 1.05rem; margin-bottom: 16px;">
+                        Identifying leaf conditions can be challenging. CropSentry provides a quick model-based class prediction for supported bell pepper, potato, and tomato leaf images.
+                    </p>
+                    <p style="font-size: 1.05rem; color: var(--text-muted);">
+                        <strong>CropSentry AI</strong> uses a trained image classifier to return leaf-class scores for bell pepper, potato, and tomato. Its output is not a diagnosis, severity assessment, or treatment recommendation.
+                    </p>
+                </div>
+
+                <div style="background: var(--bg-surface-glass); backdrop-filter: var(--glass-blur); padding: 36px; border-radius: var(--radius-xl); border: 1px solid var(--border-color); box-shadow: var(--shadow-md);">
+                    <h3 style="color: var(--text-main); margin-bottom: 20px; font-size: 1.4rem;">Core Impact Pillars</h3>
+                    
+                    <div style="display: flex; gap: 16px; margin-bottom: 18px;">
+                        <div style="width: 44px; height: 44px; border-radius: 12px; background: var(--primary-mint); color: var(--primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        </div>
+                        <div>
+                            <strong style="color: var(--text-main); font-size: 1rem;">Early Pathogen Interception</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-muted);">Detect foliar pathogens at asymptomatic or early lesion stages before irreversible boll rot occurs.</p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 16px; margin-bottom: 18px;">
+                        <div style="width: 44px; height: 44px; border-radius: 12px; background: var(--primary-mint); color: var(--primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M10 2v7.31M14 9.3V1.99M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0"/></svg>
+                        </div>
+                        <div>
+                            <strong style="color: var(--text-main); font-size: 1rem;">Targeted Input Optimization</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-muted);">Reduce indiscriminate chemical fungicide overdosing through precise, verified dosage recommendations.</p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 16px;">
+                        <div style="width: 44px; height: 44px; border-radius: 12px; background: var(--primary-mint); color: var(--primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        </div>
+                        <div>
+                            <strong style="color: var(--text-main); font-size: 1rem;">Multilingual Democratization</strong>
+                            <p style="font-size: 0.9rem; color: var(--text-muted);">Removing language barriers with native English, Hindi, and Marathi interfaces and voice support.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problem vs Solution Matrix -->
+            <div class="section-header">
+                <span class="badge brand">Transformation</span>
+                <h2>Traditional Farming vs CropSentry AI</h2>
+                <p>How artificial intelligence replaces uncertainty with scientific precision.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 60px;">
+                <div style="background: var(--bg-surface-glass); backdrop-filter: var(--glass-blur); padding: 32px; border-radius: var(--radius-xl); border: 1px solid var(--border-color); border-left: 4px solid var(--severity-high);">
+                    <h3 style="color: var(--severity-high); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                        Traditional Approach
+                    </h3>
+                    <ul style="list-style: none; padding-left: 0;">
+                        <li style="margin-bottom: 12px; font-size: 0.95rem; color: var(--text-main);">❌ Visual guesswork leading to incorrect fungicide application</li>
+                        <li style="margin-bottom: 12px; font-size: 0.95rem; color: var(--text-main);">❌ 3–7 day delay waiting for physical agricultural officer visits</li>
+                        <li style="margin-bottom: 12px; font-size: 0.95rem; color: var(--text-main);">❌ Heavy chemical overuse destroying beneficial soil microbiome</li>
+                        <li style="margin-bottom: 12px; font-size: 0.95rem; color: var(--text-main);">❌ Zero early warning for weather-triggered spore dissemination</li>
+                    </ul>
+                </div>
+
+                <div style="background: var(--bg-surface-glass); backdrop-filter: var(--glass-blur); padding: 32px; border-radius: var(--radius-xl); border: 1px solid var(--border-color); border-left: 4px solid var(--primary);">
+                    <h3 style="color: var(--primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        CropSentry AI Solution
+                    </h3>
+                    <ul style="list-style: none; padding-left: 0;">
+                        <li style="margin-bottom: 12px; font-size: 0.95rem; color: var(--text-main);">✔ Sub-second 96.4% accurate deep learning diagnosis</li>
+                        <li style="margin-bottom: 12px; font-size: 0.95rem; color: var(--text-main);">✔ Instant 24/7 access from any smartphone in the field</li>
+                        <li style="margin-bottom: 12px; font-size: 0.95rem; color: var(--text-main);">✔ Vetted bio-organic alternatives alongside chemical remedies</li>
+                        <li style="margin-bottom: 12px; font-size: 0.95rem; color: var(--text-main);">✔ 7-day predictive micro-climate outbreak probability alerts</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Future Roadmap -->
+            <div class="section-header">
+                <span class="badge brand">Roadmap</span>
+                <h2>Innovation Horizon 2026–2028</h2>
+                <p>Ongoing research and technological expansions currently under development.</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <span class="badge brand" style="margin-bottom: 10px;">Phase 1 (Q3 2026)</span>
+                    <h3>Edge ML Offline Mode</h3>
+                    <p>Quantized ONNX models running completely client-side in WebAssembly for zero-connectivity remote rural diagnosis.</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="badge brand" style="margin-bottom: 10px;">Phase 2 (Q4 2026)</span>
+                    <h3>Drone NDVI Scanning</h3>
+                    <p>Automated drone flight integration for aerial multi-acre canopy spectral mapping and localized spot spraying.</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="badge brand" style="margin-bottom: 10px;">Phase 3 (2027)</span>
+                    <h3>Multi-Crop Expansion</h3>
+                    <p>Expanding the neural pipeline to Soybean, Rice, Sugarcane, and Wheat foliar pathogen detection.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>🌿 CropSentry AI</h3>
+                    <p>Leaf classification for the supported bell pepper, potato, and tomato classes.</p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="predict.html">Predict Disease</a></li>
+                        <li><a href="how-it-works.html">How It Works</a></li>
+                        <li><a href="disease.html">Model Classes</a></li>
+                        <li><a href="dashboard.html">Farmer Dashboard</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Features</h4>
+                    <ul class="footer-links">
+                        <li><a href="predict.html">AI Disease Detection</a></li>
+                        <li><a href="predict.html">Classify a Leaf</a></li>
+                        <li><a href="predict.html#compareSection">Healthy vs Diseased</a></li>
+                        <li><a href="dashboard.html">Risk Heatmap</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Contact Support</h4>
+                    <p style="font-size: 0.9rem;">📍 India</p>
+                    <p style="font-size: 0.9rem;">📧 <a href="contact.html#contactForm">Contact support</a></p>
+                    <p style="font-size: 0.9rem;">📞 Toll-Free Helpline: 1800-XXX-XXXX</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2026 CropSentry AI | Built for Farmers 🌱 | Hackathon Project 🚀</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="api.js"></script>
+    <script src="auth.js"></script>
+    <script src="login.js"></script>
+    <script src="main.js"></script>
+    <script src="motion-effects.js"></script>
+    <script src="chatbot.js"></script>
+</body>
+
+</html>

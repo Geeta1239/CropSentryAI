@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact & Smart Farmer Support | CropSentry AI</title>
+    <meta name="description" content="Connect with certified agronomists, submit urgent crop damage tickets, and access 24/7 automated crop pathology support.">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon-box">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                </div>
+                CropSentry<span>AI</span>
+            </a>
+
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="predict.html">Predict</a>
+                <a href="how-it-works.html">How It Works</a>
+                <a href="disease.html">Diseases</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="about.html">About</a>
+                <a href="contact.html" class="active">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <div id="userNavBadge"></div>
+
+                <!-- Theme Toggle -->
+                <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Dark/Light Mode" title="Toggle Theme">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+
+                <select id="langSelect" class="lang-select" aria-label="Select Language">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी</option>
+                    <option value="mr">मराठी</option>
+                </select>
+
+                <a href="predict.html" class="btn-primary btn-sm">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                    Scan Leaf
+                </a>
+
+                <button id="authBtn" class="btn-secondary btn-sm">Login</button>
+                <button id="mobileNavToggle" class="mobile-toggle" aria-label="Toggle navigation menu">
+                    <svg class="icon icon-lg" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileDrawer" class="mobile-drawer">
+        <a href="index.html">Home</a>
+        <a href="predict.html">Predict Disease</a>
+        <a href="how-it-works.html">How It Works</a>
+        <a href="disease.html">Diseases Encyclopedia</a>
+        <a href="dashboard.html">Farmer Dashboard</a>
+        <a href="admin.html">Admin Console</a>
+        <a href="about.html">About Project</a>
+        <a href="contact.html" class="active">Farmer Support</a>
+        <a href="login.html">Login / Register</a>
+    </div>
+
+    <!-- ================= PAGE HEADER ================= -->
+    <section class="page-header">
+        <div class="container">
+            <span class="badge brand" style="margin-bottom: 12px;">24/7 Dedicated Helpline</span>
+            <h1>Smart Farmer Support & Agronomy Consultation</h1>
+            <p>Connect with university plant pathologists, submit urgent outbreak inquiries, or receive automated guidance via our intelligent support system.</p>
+        </div>
+    </section>
+
+    <!-- ================= LIVE STATUS BAR ================= -->
+    <div class="container">
+        <div style="background: var(--bg-surface-glass); backdrop-filter: var(--glass-blur); border: 1px solid var(--border-color); padding: 14px 24px; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: var(--shadow-sm);">
+            <div style="display: flex; align-items: center; gap: 10px; font-weight: 600; color: var(--primary); font-size: 0.925rem;">
+                <span style="width: 10px; height: 10px; border-radius: 50%; background: #16a34a; box-shadow: 0 0 10px #22c55e;"></span>
+                14 Certified Agronomists Online Across Maharashtra, Gujarat & Telangana
+            </div>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Average Response Time: <strong>&lt; 15 mins</strong></span>
+        </div>
+    </div>
+
+    <!-- ================= CONTACT GRID ================= -->
+    <section class="section-padding" style="padding-top: 30px;">
+        <div class="container">
+            <div class="contact-grid">
+
+                <!-- Smart Contact Form -->
+                <div class="contact-card">
+                    <div style="margin-bottom: 24px;">
+                        <h2 style="font-size: 1.8rem; color: var(--text-main); margin-bottom: 6px;">Submit Agronomic Inquiry</h2>
+                        <p style="font-size: 0.95rem;">Requests marked with Emergency Crop Damage receive immediate priority SMS/Call dispatch.</p>
+                    </div>
+
+                    <form id="contactForm">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div class="form-group">
+                                <label for="farmerName">Farmer Full Name *</label>
+                                <input type="text" id="farmerName" class="form-control" placeholder="e.g., Ramesh Patel" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="farmerMobile">Mobile Phone Number *</label>
+                                <input type="tel" id="farmerMobile" class="form-control" placeholder="e.g., +91 98765 43210" required>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div class="form-group">
+                                <label for="farmerEmail">Email Address (Optional)</label>
+                                <input type="email" id="farmerEmail" class="form-control" placeholder="name@domain.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="farmerLocation">District, State *</label>
+                                <input type="text" id="farmerLocation" class="form-control" placeholder="e.g., Wardha, Maharashtra" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="queryType">Inquiry Category & Priority *</label>
+                            <select id="queryType" class="form-control" required>
+                                <option value="">-- Select Category --</option>
+                                <option value="emergency">🚨 Emergency Severe Crop Infestation (High Priority)</option>
+                                <option value="disease">🦠 Disease Classification Verification</option>
+                                <option value="treatment">💊 Bio-Control & Pesticide Dosage Guidance</option>
+                                <option value="technical">🛠 App or Camera Technical Support</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="leafPhotoUpload">Attach Leaf Photo (Optional)</label>
+                            <input type="file" id="leafPhotoUpload" accept="image/*" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="problemDesc">Problem Symptoms & Crop Stage Description</label>
+                            <textarea id="problemDesc" class="form-control" rows="4" placeholder="Describe when spots appeared, boll formation stage, recent rainfall, or current pesticide sprays..."></textarea>
+                        </div>
+
+                        <div class="form-group" style="display: flex; align-items: flex-start; gap: 10px;">
+                            <input type="checkbox" id="dataConsent" style="margin-top: 4px;" checked>
+                            <label for="dataConsent" style="font-size: 0.85rem; color: var(--text-muted); font-weight: normal; margin-bottom: 0;">
+                                I consent to share anonymous leaf imagery to improve the CropSentry model dataset.
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn-primary" style="width: 100%; padding: 14px; font-weight: 700; font-size: 1rem; border-radius: var(--radius-md); margin-top: 10px;">
+                            <svg class="icon" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                            Submit Support Request
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Support Info & Emergency Advisory -->
+                <div style="display: flex; flex-direction: column; gap: 24px;">
+                    
+                    <!-- Emergency Card -->
+                    <div style="background: var(--bg-surface-glass); backdrop-filter: var(--glass-blur); border: 1px solid var(--border-color); border-left: 4px solid var(--severity-high); padding: 28px; border-radius: var(--radius-xl); box-shadow: var(--shadow-md);">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                            <svg class="icon icon-lg" style="color: var(--severity-high);" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                            <h3 style="color: var(--severity-high); font-size: 1.25rem;">Emergency Outbreak Protocol</h3>
+                        </div>
+                        <p style="font-size: 0.9rem; color: var(--text-main); line-height: 1.5; margin-bottom: 16px;">
+                            If rapid wilting or heavy leaf curling impacts &gt;30% of your crop canopy, immediately contact the nearest Krishi Vigyan Kendra (KVK) or call our direct emergency line.
+                        </p>
+                        <a href="tel:18001234567" class="btn-primary btn-sm" style="background: #dc2626; width: 100%;">
+                            📞 Dial Emergency Agronomist (1800-XXX-XXXX)
+                        </a>
+                    </div>
+
+                    <!-- Direct Help Channels -->
+                    <div class="info-card">
+                        <h3 style="color: var(--text-main); font-size: 1.3rem; margin-bottom: 18px;">Direct Support Channels</h3>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 14px; font-size: 0.95rem;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary-mint); color: var(--primary); display: flex; align-items: center; justify-content: center;">
+                                    <svg class="icon" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                                </div>
+                                <div>
+                                    <span style="font-size: 0.8rem; color: var(--text-subtle); display: block;">Support</span>
+                                    <strong>Submit the support form below</strong>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary-mint); color: var(--primary); display: flex; align-items: center; justify-content: center;">
+                                    <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                </div>
+                                <div>
+                                    <span style="font-size: 0.8rem; color: var(--text-subtle); display: block;">Consultation Hours</span>
+                                    <strong>Monday – Saturday (8:00 AM – 7:00 PM IST)</strong>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary-mint); color: var(--primary); display: flex; align-items: center; justify-content: center;">
+                                    <svg class="icon" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                </div>
+                                <div>
+                                    <span style="font-size: 0.8rem; color: var(--text-subtle); display: block;">Headquarters</span>
+                                    <strong>AgriTech Research Corridor, Hyderabad, India</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border-color);">
+                            <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-subtle);">Connect on Farmer Community Networks:</span>
+                            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                <a href="#" class="btn-secondary btn-sm" style="flex: 1; text-align: center;">💬 WhatsApp</a>
+                                <a href="#" class="btn-secondary btn-sm" style="flex: 1; text-align: center;">📘 Facebook Group</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ================= INTERACTIVE FAQ ACCORDION ================= -->
+            <div class="faq-wrap">
+                <div class="section-header" style="margin-bottom: 30px;">
+                    <span class="badge brand">Answers & Assistance</span>
+                    <h2>Frequently Asked Questions</h2>
+                    <p>Quick answers regarding AI accuracy, offline capabilities, and data security.</p>
+                </div>
+
+                <div class="container-sm">
+                    <div class="faq-item open">
+                        <div class="faq-question">
+                            <span>How accurate is the CropSentry AI computer vision model?</span>
+                            <svg class="icon" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                        <div class="faq-answer">
+                            The trained MobileNetV2 model achieved 86.29% accuracy on its 3,101-image held-out test set. Performance varies by class; the returned class score is not a measure of diagnosis certainty.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What should I do if the AI confidence rating is below 70%?</span>
+                            <svg class="icon" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                        <div class="faq-answer">
+                            Low confidence often occurs from extreme camera blur, heavy shadows, or leaves covered in dry dust. We recommend retaking the photograph against a plain background under direct daylight, or utilizing our 'Compare Leaves' tool.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Is the disease diagnosis service free for farmers?</span>
+                            <svg class="icon" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                        <div class="faq-answer">
+                            Yes, CropSentry is 100% free and open-access for smallholder cultivators and students. We believe precision agronomic tools should be universally accessible.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Can I use the app without an internet connection?</span>
+                            <svg class="icon" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                        <div class="faq-answer">
+                            Once loaded in your browser, key diagnostic guides and previous scans remain cached locally. Our offline on-device Edge ML version is launching in Phase 1 (Q3 2026).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>🌿 CropSentry AI</h3>
+                    <p>Leaf classification for the supported bell pepper, potato, and tomato classes.</p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="predict.html">Predict Disease</a></li>
+                        <li><a href="how-it-works.html">How It Works</a></li>
+                        <li><a href="disease.html">Model Classes</a></li>
+                        <li><a href="dashboard.html">Farmer Dashboard</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Features</h4>
+                    <ul class="footer-links">
+                        <li><a href="predict.html">AI Disease Detection</a></li>
+                        <li><a href="predict.html">Classify a Leaf</a></li>
+                        <li><a href="predict.html#compareSection">Healthy vs Diseased</a></li>
+                        <li><a href="dashboard.html">Risk Heatmap</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Contact Support</h4>
+                    <p style="font-size: 0.9rem;">📍 India</p>
+                    <p style="font-size: 0.9rem;">📧 <a href="contact.html#contactForm">Contact support</a></p>
+                    <p style="font-size: 0.9rem;">📞 Toll-Free Helpline: 1800-XXX-XXXX</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2026 CropSentry AI | Built for Farmers 🌱 | Hackathon Project 🚀</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="api.js"></script>
+    <script src="auth.js"></script>
+    <script src="login.js"></script>
+    <script src="main.js"></script>
+    <script src="motion-effects.js"></script>
+    <script src="chatbot.js"></script>
+</body>
+
+</html>
