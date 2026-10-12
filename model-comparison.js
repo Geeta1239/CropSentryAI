@@ -20,6 +20,29 @@
         return node;
     }
 
+    // Keep the "Test accuracy" panel truthful for whichever model is selected.
+    function bindAccuracyPanel(models) {
+        const accuracy = document.getElementById("modelAccuracy");
+        const note = document.getElementById("modelEvaluationNote");
+        if (!accuracy || !note) return;
+        let defaultAccuracy = null;
+        let defaultNote = null;
+        modelSelect.addEventListener("change", () => {
+            if (defaultAccuracy === null) {
+                defaultAccuracy = accuracy.textContent;
+                defaultNote = note.textContent;
+            }
+            const model = models.find(item => item.id === modelSelect.value);
+            if (model && model.metrics && typeof model.metrics.accuracy === "number") {
+                accuracy.textContent = `${(model.metrics.accuracy * 100).toFixed(2)}%`;
+                note.textContent = `${model.name} · comparative-study test set`;
+            } else {
+                accuracy.textContent = defaultAccuracy;
+                note.textContent = defaultNote;
+            }
+        });
+    }
+
     async function populateModelSelect() {
         if (!modelSelect) return;
         try {
@@ -31,6 +54,7 @@
                 option.disabled = !model.available;
                 modelSelect.append(option);
             });
+            bindAccuracyPanel(models);
         } catch {
             /* Keep the default option when the API is unreachable. */
         }

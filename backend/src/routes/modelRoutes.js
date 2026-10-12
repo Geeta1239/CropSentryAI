@@ -26,6 +26,8 @@ router.get("/results/*", async (req, res, next) => {
     try {
         const file = await getResultFile(req.params[0]);
         if (!file) return res.status(404).json({ error: "Result file not found" });
+        // The site is served from another origin (e.g. :8000), and helmet defaults to same-origin.
+        res.set("Cross-Origin-Resource-Policy", "cross-origin");
         res.sendFile(file);
     } catch (error) {
         next(error);
