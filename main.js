@@ -271,7 +271,8 @@ function initPredictionEngine() {
             `;
 
             try {
-                const res = await CropSentryApi.predict(selectedFile);
+                const modelSelect = document.getElementById("modelSelect");
+                const res = await CropSentryApi.predict(selectedFile, modelSelect ? modelSelect.value : undefined);
                 const prediction = res.prediction;
 
                 if (laserScan) laserScan.style.display = "none";
@@ -294,6 +295,13 @@ function initPredictionEngine() {
                 const classTypeBadge = document.getElementById("classTypeBadge");
                 if (cropLabel) cropLabel.textContent = `Crop: ${prediction.crop} · ${prediction.type}`;
                 if (classTypeBadge) classTypeBadge.textContent = prediction.type;
+                const modelUsedLabel = document.getElementById("resultModelUsed");
+                if (modelUsedLabel && prediction.model) {
+                    const timing = typeof prediction.inferenceMs === "number"
+                        ? ` · ${prediction.inferenceMs.toFixed(0)} ms inference`
+                        : "";
+                    modelUsedLabel.textContent = `Model used: ${prediction.model.name}${timing}`;
+                }
                 const confBar = document.getElementById("confidenceProgress");
                 const confText = document.getElementById("confidenceText");
                 if (confBar) confBar.style.width = `${Math.min(prediction.confidence, 100)}%`;

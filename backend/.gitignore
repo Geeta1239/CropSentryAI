@@ -2,3 +2,6 @@ node_modules/
 .env
 uploads/
 coverage/
+
+# Trained comparative-study weights are large; keep them out of git (metrics/plots in results/ are kept)
+artifacts/comparison/*/model.keras

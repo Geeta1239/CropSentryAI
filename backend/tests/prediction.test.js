@@ -98,3 +98,45 @@ test("prediction accepts a valid leaf image for an authenticated farmer", async 
     expect(response.body.isGuest).toBe(false);
     expect(response.body.savedToHistory).toBe(false);
 });
+
+describe("comparative-study model selection", () => {
+    test("prediction without a model field reports the deployed model", async () => {
+        const response = await request(app)
+            .post("/api/predictions")
+            .attach("image", validPng, { filename: "leaf.png", contentType: "image/png" });
+
+        expect(response.status).toBe(201);
+        expect(predict).toHaveBeenCalledTimes(1);
+        expect(response.body.prediction.model.id).toBe("default");
+    });
+
+    test("an unknown model id is rejected without running any model", async () => {
+        const response = await request(app)
+            .post("/api/predictions")
+            .field("model", "not_a_model")
+            .attach("image", validPng, { filename: "leaf.png", contentType: "image/png" });
+
+        expect(response.status).toBe(400);
+        expect(predict).not.toHaveBeenCalled();
+    });
+
+    test("an untrained study model returns a helpful conflict", async () => {
+        const response = await request(app)
+            .post("/api/predictions")
+            .field("model", "resnet50")
+            .attach("image", validPng, { filename: "leaf.png", contentType: "image/png" });
+
+        expect(response.status).toBe(409);
+        expect(response.body.error).toMatch(/comparison\.train --model resnet50/);
+        expect(predict).not.toHaveBeenCalled();
+    });
+
+    test("model list always includes the deployed model and the four study models", async () => {
+        const response = await request(app).get("/api/models");
+
+        expect(response.status).toBe(200);
+        expect(response.body.models.map(model => model.id)).toEqual([
+            "default", "mobilenetv2", "efficientnet_b0", "resnet50", "efficientnet_b3"
+        ]);
+    });
+});

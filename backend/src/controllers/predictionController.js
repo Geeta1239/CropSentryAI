@@ -4,10 +4,16 @@ import path from "node:path";
 import { env } from "../config/env.js";
 import { createPrediction, findPredictionForUser, listPredictionsForUser } from "../models/predictionModel.js";
 import { predict } from "../services/predictionService.js";
+import { DEFAULT_MODEL_ID, predictWithModel } from "../services/comparisonModelService.js";
 
 export async function create(req, res, next) {
     try {
-        const result = await predict(req.file);
+        // Optional "model" form field selects a comparative-study model; without it the
+        // deployed MobileNetV2 runs exactly as before.
+        const modelId = typeof req.body?.model === "string" ? req.body.model.trim() : "";
+        const result = modelId && modelId !== DEFAULT_MODEL_ID
+            ? await predictWithModel(req.file, modelId)
+            : await predict(req.file);
         let saved = null;
 
         if (req.user && result.disease.id) {
@@ -28,7 +34,8 @@ export async function create(req, res, next) {
                 id: saved ? saved.id : crypto.randomUUID(),
                 createdAt: saved ? saved.created_at : new Date().toISOString(),
                 disease: result.disease,
-                ...result
+                ...result,
+                model: result.model || { id: DEFAULT_MODEL_ID, name: "MobileNetV2 (deployed, 15 classes)" }
             },
             isGuest: !req.user,
             savedToHistory: Boolean(saved)

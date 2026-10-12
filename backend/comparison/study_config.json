@@ -1,0 +1,17 @@
+{
+    "seed": 42,
+    "data_dir": "data/images",
+    "img_size": 224,
+    "batch_size": 32,
+    "epochs": 30,
+    "optimizer": "adam",
+    "learning_rate": 0.001,
+    "loss": "categorical_crossentropy",
+    "early_stopping_patience": 5,
+    "dropout": 0.2,
+    "dense_units": 256,
+    "use_class_weights": true,
+    "weights": "imagenet",
+    "results_dir": "results",
+    "artifacts_dir": "artifacts/comparison"
+}

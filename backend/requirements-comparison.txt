@@ -1,0 +1,4 @@
+# Extra packages for the comparative study only (graphs). Install in addition to requirements.txt:
+#   pip install -r requirements.txt -r requirements-comparison.txt
+# The deployed inference path (requirements.txt) does not need these.
+matplotlib>=3.7,<4

@@ -19,6 +19,7 @@ The project combines a static, responsive website with a Node.js API and local P
 - [API overview](#api-overview)
 - [Tests and code quality](#tests-and-code-quality)
 - [Dataset and training scripts](#dataset-and-training-scripts)
+- [Comparative Study](#comparative-study)
 - [Docker note](#docker-note)
 - [Security and responsible use](#security-and-responsible-use)
 
@@ -256,6 +257,113 @@ cd "C:\VS Code\project\backend"
 ```
 
 The training utility is a separate workflow from the deployed 15-class TensorFlow Lite artifact. Running it does not automatically replace or convert `artifacts/crop-disease/model.tflite`; the active inference artifacts and their matching labels must be deployed together.
+
+## Comparative Study
+
+This section extends CropSentry with a **comparative study of four deep-learning models**. It is purely additive: the deployed MobileNetV2 TensorFlow Lite model, `backend/src/ml/predict.py`, `backend/src/scripts/train_model.py` and `POST /api/predictions` (without a `model` field) behave exactly as before.
+
+### Models used
+
+Ordered from lightweight to heavy. All four use ImageNet-pretrained backbones through `tf.keras.applications`.
+
+| # | Model | Architecture type | Approx. backbone size* | Why it was selected | Expected advantages / disadvantages |
+| --- | --- | --- | --- | --- | --- |
+| 1 | **MobileNetV2** | Depthwise-separable convolutions, inverted residuals, linear bottlenecks | ~2.3 M parameters | The project's existing baseline | Fastest and smallest, so it suits mobile and edge use; usually the lowest capacity |
+| 2 | **EfficientNet-B0** | MBConv blocks with squeeze-and-excitation, compound-scaled | ~4.0 M parameters | Modern efficient network, still lightweight | Often better accuracy per parameter than MobileNetV2; slower on CPU because of the extra operations |
+| 3 | **ResNet50** | 50-layer residual network with bottleneck blocks | ~23.6 M parameters | Classic, widely cited medium/heavy baseline | Robust features and a standard reference; large and slow with no accuracy-per-parameter advantage |
+| 4 | **EfficientNet-B3** | Deeper, wider EfficientNet (native 300 x 300) | ~10.8 M parameters | Heavier member of the efficient family | Highest capacity of the efficient models; slowest to train and run, and run below its native resolution by default (see limitations) |
+
+\* Backbone only (no ImageNet classifier). The exact counts for the full classifiers (backbone + the shared head) are measured and written to `backend/results/model_comparison.csv`.
+
+### Dataset
+
+By default the study uses the dataset already in the repository: `backend/data/images/{train,validation,test}/<class>/`, created by `src/scripts/prepare_dataset.py` (fixed seed 42, 70/15/15 split, six classes: `alternaria_leaf_spot`, `bacterial_blight`, `curl_virus`, `fusarium_wilt`, `healthy`, `verticillium_wilt`; 1472 / 318 / 314 images). The class list is read from the folder names, never hard-coded. To run the study on another dataset with the same layout, use `--data-dir`.
+
+> The deployed model in `backend/artifacts/crop-disease/` is a separate 15-class pepper/potato/tomato classifier whose training data is not in this repository. It is **not** part of the comparison, because a fair comparison needs all four models trained on the same data. In the prediction page it stays available as "MobileNetV2 (deployed, 15 classes)".
+
+### Experimental setup
+
+All settings live in `backend/comparison/study_config.json` and are identical for every model (override a value for a run with flags such as `--epochs`):
+
+| Setting | Value |
+| --- | --- |
+| Random seed | 42 |
+| Input size | 224 x 224 (all models) |
+| Batch size | 32 |
+| Max epochs | 30, early stopping on validation accuracy (patience 5, best weights kept) |
+| Optimizer / learning rate | Adam, 0.001 |
+| Loss | Categorical cross-entropy |
+| Transfer learning | ImageNet weights, **frozen backbone**, same as the existing `train_model.py` |
+| Classifier head | GlobalAveragePooling -> Dropout 0.2 -> Dense 256 (ReLU) -> Dropout 0.2 -> Dense softmax |
+| Augmentation | Random horizontal flip, rotation 0.08, zoom 0.1 (training only) |
+| Class imbalance | Balanced class weights computed from the training split |
+
+Each model applies the preprocessing its ImageNet weights expect inside the model: MobileNetV2 scales to [-1, 1] (same as `predict.py`), ResNet50 uses BGR mean-centring, and the Keras EfficientNets normalise internally. The data pipeline is shared.
+
+### Metrics
+
+For every model, on the same held-out test set: accuracy; macro precision, recall and F1 (plus weighted F1); per-class precision/recall/F1/support; confusion matrix; total, trainable and non-trainable parameters; saved model size (MB); training time; average, median and 95th-percentile inference time per image (batch size 1); throughput (images/s); and the input size, batch size, epochs, optimizer, learning rate, loss and device used.
+
+### Training and evaluation procedure
+
+`python -m comparison.train` loads the shared dataset, builds the model through the factory (`comparison/models/__init__.py: get_model`), trains it, keeps the best-validation-accuracy checkpoint, evaluates that checkpoint on the test set, measures inference speed, and then refreshes the comparison table and graphs. `python -m comparison.evaluate` re-evaluates saved models without retraining. Nothing is hard-coded: if a model has not been trained, it does not appear in the results.
+
+### Commands
+
+Run from the `backend` directory (the Python environment from [Run locally on Windows](#run-locally-on-windows)). `matplotlib` is only needed for the graphs.
+
+```powershell
+cd backend
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt -r requirements-comparison.txt
+
+# Train each model (any order; each run updates the comparison)
+.\.venv\Scripts\python.exe -m comparison.train --model mobilenetv2
+.\.venv\Scripts\python.exe -m comparison.train --model efficientnet_b0
+.\.venv\Scripts\python.exe -m comparison.train --model resnet50
+.\.venv\Scripts\python.exe -m comparison.train --model efficientnet_b3
+# or all four in sequence
+.\.venv\Scripts\python.exe -m comparison.train --model all
+
+# Re-evaluate saved models on the test set (one model, or all trained models)
+.\.venv\Scripts\python.exe -m comparison.evaluate --model all
+
+# Regenerate the comparison table and all graphs from saved results
+.\.venv\Scripts\python.exe -m comparison.compare
+
+# Run the application (two terminals, as described above)
+python -m http.server 8000      # repository root
+npm run dev                     # backend
+```
+
+Outputs:
+
+```text
+backend/results/
+|-- model_comparison.csv / .json      # final comparison table
+|-- per_model/<model>.json            # full metrics, per-class scores, config, hardware
+|-- confusion_matrices/<model>.png|.csv
+|-- training_history/<model>.json
+`-- plots/                            # accuracy, F1, parameters, size, training time,
+                                      # inference time, and accuracy/loss vs epoch
+backend/artifacts/comparison/<model>/  # model.keras, labels.txt (weights are git-ignored)
+```
+
+### Using the models in the application
+
+Open `predict.html`, choose a model in the **Model** dropdown, upload a leaf image and analyze it; the result shows the predicted class, confidence and the model used. Models appear in the dropdown as soon as they are trained. The **Model Comparison / Performance Analysis** section at the bottom of the page displays `backend/results/model_comparison.json` and the generated graphs. API additions: `GET /api/models`, `GET /api/models/comparison`, and an optional `model` form field on `POST /api/predictions` (`default`, `mobilenetv2`, `efficientnet_b0`, `resnet50`, `efficientnet_b3`). Set `COMPARISON_CROP_NAME` if your study dataset is not cotton.
+
+### Fair-comparison methodology
+
+Use one fixed split and test set, the same class order, seed, input size, batch size, optimizer, learning rate, loss, augmentation, class weights and early-stopping rule for all four models, and the same hardware for the timing measurements. Report macro-F1 alongside accuracy because the classes are imbalanced, and report training time together with the device it ran on. If you also run EfficientNet-B3 at its native 300 x 300 (`--img-size 300 --results-dir results_b3_300 --artifacts-dir artifacts/comparison_b3_300`), present it as a separate, clearly labelled experiment.
+
+### Limitations
+
+- Results depend on the hardware: timings from a CPU and a GPU are not comparable.
+- The backbone is frozen (matching the existing baseline), so the study measures feature quality for transfer learning, not full fine-tuning.
+- The test set is small (314 images) and imbalanced (`curl_virus` has only 4 test images), so per-class scores and small accuracy gaps are statistically weak; one seed per model gives no variance estimate. Repeat with several `--seed` values if you need confidence intervals.
+- EfficientNet-B3 runs at 224 x 224 instead of its native 300 x 300 so that all models see identical input.
+- Training on CPU is slow, especially ResNet50 and EfficientNet-B3; a GPU is strongly recommended.
+- The legacy `train_model.py` uses `Rescaling(scale=2.0, offset=-1.0)` on 0-255 pixels; the study instead uses the correct [-1, 1] scaling that `predict.py` already applies. `train_model.py` itself was left unchanged.
 
 ## Docker note
 

@@ -4,6 +4,7 @@ import helmet from "helmet";
 import { env } from "./config/env.js";
 import authRoutes from "./routes/authRoutes.js";
 import predictionRoutes from "./routes/predictionRoutes.js";
+import modelRoutes from "./routes/modelRoutes.js";
 import diseaseRoutes from "./routes/diseaseRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import { getModelInfo } from "./services/predictionService.js";
@@ -29,6 +30,7 @@ app.get("/api/model", async (req, res, next) => {
         next(error);
     }
 });
+app.use("/api/models", modelRoutes);
 app.use("/api/diseases", diseaseRoutes);
 app.use("/api/admin", adminRoutes);
 app.use(notFound);

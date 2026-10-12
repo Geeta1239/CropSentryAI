@@ -64,11 +64,16 @@ window.CropSentryApi = (() => {
                 clearToken();
             }
         },
-        predict: (image) => {
+        // `model` is optional; omitted (or "default") runs the deployed MobileNetV2 as before.
+        predict: (image, model) => {
             const form = new FormData();
+            if (model && model !== "default") form.append("model", model);
             form.append("image", image);
             return request("/predictions", { method: "POST", body: form });
         },
+        models: () => request("/models"),
+        modelComparison: () => request("/models/comparison"),
+        resultAssetUrl: (path) => `${baseUrl}/models/results/${path}`,
         predictions: () => request("/predictions"),
         adminMetrics: () => request("/admin/metrics"),
         adminPredictions: () => request("/admin/predictions")
