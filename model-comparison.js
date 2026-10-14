@@ -13,6 +13,13 @@
         { key: "avg_inference_ms_per_image", title: "Inference time per image", format: value => `${value.toFixed(1)} ms` }
     ];
 
+    const demoRows = [
+        { key: "mobilenetv2", model: "MobileNetV2", total_parameters: 3.54e6, model_size_mb: 14.2, accuracy: 0.913, macro_precision: 0.902, macro_recall: 0.891, macro_f1: 0.895, training_time_seconds: 1320, avg_inference_ms_per_image: 18.4, img_size: 224, batch_size: 32, optimizer: "Adam", learning_rate: 0.001, loss: "Categorical cross-entropy", device_used: "Prototype fixture" },
+        { key: "efficientnetb0", model: "EfficientNet-B0", total_parameters: 5.29e6, model_size_mb: 20.8, accuracy: 0.934, macro_precision: 0.927, macro_recall: 0.919, macro_f1: 0.922, training_time_seconds: 1710, avg_inference_ms_per_image: 22.1, img_size: 224, batch_size: 32, optimizer: "Adam", learning_rate: 0.001, loss: "Categorical cross-entropy", device_used: "Prototype fixture" },
+        { key: "resnet50", model: "ResNet50", total_parameters: 25.64e6, model_size_mb: 98.6, accuracy: 0.926, macro_precision: 0.918, macro_recall: 0.911, macro_f1: 0.914, training_time_seconds: 2390, avg_inference_ms_per_image: 31.8, img_size: 224, batch_size: 32, optimizer: "Adam", learning_rate: 0.001, loss: "Categorical cross-entropy", device_used: "Prototype fixture" },
+        { key: "efficientnetb3", model: "EfficientNet-B3", total_parameters: 12.32e6, model_size_mb: 47.5, accuracy: 0.941, macro_precision: 0.936, macro_recall: 0.928, macro_f1: 0.931, training_time_seconds: 2860, avg_inference_ms_per_image: 38.7, img_size: 224, batch_size: 32, optimizer: "Adam", learning_rate: 0.001, loss: "Categorical cross-entropy", device_used: "Prototype fixture" }
+    ];
+
     function element(tag, text, className) {
         const node = document.createElement(tag);
         if (text !== undefined) node.textContent = text;
@@ -144,13 +151,19 @@
         const status = document.getElementById("studyStatus");
         try {
             const { comparison } = await CropSentryApi.modelComparison();
+            if (!comparison || !comparison.models || comparison.models.length < 4) throw new Error("Comparison results are not ready");
             status.hidden = true;
+            document.getElementById("studyDemoNotice").hidden = true;
+            document.getElementById("studyModeBadge").textContent = "Trained results";
             renderTable(comparison.models);
             renderBars(comparison.models);
             renderPlots(comparison.models, comparison.plots || []);
         } catch (error) {
-            status.hidden = false;
-            status.textContent = error.message;
+            status.hidden = true;
+            document.getElementById("studyDemoNotice").hidden = false;
+            document.getElementById("studyModeBadge").textContent = "Illustrative sample data";
+            renderTable(demoRows);
+            renderBars(demoRows);
         }
     }
 

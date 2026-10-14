@@ -8,3 +8,6 @@ backend/.venv/
 __pycache__/
 *.pyc
 "@ | Out-File -Encoding utf8 .gitignore
+# External PlantVillage data is downloaded locally and must not be committed.
+backend/data/plantvillage_15/
+backend/data/images_15/

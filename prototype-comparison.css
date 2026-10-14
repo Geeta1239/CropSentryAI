@@ -1,0 +1,9 @@
+/* Prototype comparative-study presentation layer */
+.prototype-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; margin-bottom: 8px; }
+.prototype-heading h2 { margin-top: 10px; }
+.prototype-notice { margin: 18px 0; padding: 14px 16px; border: 1px solid rgba(217,119,6,.35); border-left: 4px solid var(--accent-gold); border-radius: var(--radius-md); background: var(--accent-gold-light); color: var(--text-main); font-size: .9rem; }
+.prototype-samples { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 22px 0; }
+.prototype-samples > div { overflow: hidden; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-surface); box-shadow: var(--shadow-sm); }
+.prototype-samples img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+.prototype-samples span { display: block; padding: 9px 12px; color: var(--text-muted); font-size: .78rem; font-weight: 600; }
+@media (max-width: 700px) { .prototype-heading { display: block; } .prototype-heading .badge { margin-top: 12px; } .prototype-samples { grid-template-columns: 1fr; } }
