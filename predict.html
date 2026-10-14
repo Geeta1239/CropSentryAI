@@ -385,6 +385,30 @@
                 <div id="studyPlots" class="study-plots" hidden></div>
             </div>
 
+            <div id="sideBySideSection" class="compare-container side-by-side-section">
+                <div class="prototype-heading">
+                    <div>
+                        <span class="badge brand">Live inference comparison</span>
+                        <h2>Compare One Image Across All Four Models</h2>
+                    </div>
+                    <span class="badge low">Parallel run</span>
+                </div>
+                <p>Upload one leaf image and send it to MobileNetV2, EfficientNet-B0, ResNet50, and EfficientNet-B3 together. This compares model predictions for the same image; it is different from the test-set statistical analysis above.</p>
+                <div id="sideBySideStatus" class="prototype-notice" hidden></div>
+                <div class="side-by-side-controls">
+                    <label class="side-by-side-upload" for="sideBySideInput">
+                        <strong>Choose a leaf image</strong>
+                        <span>JPG, PNG, or WEBP · up to 10 MB</span>
+                    </label>
+                    <input id="sideBySideInput" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+                    <img id="sideBySidePreview" class="side-by-side-preview" alt="Selected leaf for four-model comparison" hidden>
+                    <button id="sideBySideAnalyze" class="btn-primary" type="button" disabled>Compare with all four models</button>
+                </div>
+                <div id="sideBySideResults" class="side-by-side-results" aria-live="polite">
+                    <div class="side-by-side-empty">Select an image to see four predictions side by side.</div>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -438,6 +462,7 @@
     <script src="login.js"></script>
     <script src="main.js"></script>
     <script src="model-comparison.js"></script>
+    <script src="side-by-side-comparison.js"></script>
     <script src="motion-effects.js"></script>
     <script src="chatbot.js"></script>
 </body>
