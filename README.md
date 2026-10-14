@@ -69,7 +69,7 @@ Prediction works without signing in. The current 15-class model output is not ma
 | Tests and linting | Jest, Supertest, ESLint |
 | Optional container orchestration | Docker Compose |
 
-There is no root-level package installation or frontend compilation step. External page libraries are loaded from CDNs and therefore need network access in the browser.
+There is no root-level package installation or frontend compilation step. The repository root is the canonical frontend for this project: use `predict.html`, `api.js`, `main.js`, `model-comparison.js`, and `side-by-side-comparison.js` from the root. The `frontend/` directory is a legacy duplicate and is not the page used by the current prototype. External page libraries are loaded from CDNs and therefore need network access in the browser.
 
 ## Project structure
 
@@ -277,9 +277,9 @@ Ordered from lightweight to heavy. All four use ImageNet-pretrained backbones th
 
 ### Dataset
 
-By default the study uses the dataset already in the repository: `backend/data/images/{train,validation,test}/<class>/`, created by `src/scripts/prepare_dataset.py` (fixed seed 42, 70/15/15 split, six classes: `alternaria_leaf_spot`, `bacterial_blight`, `curl_virus`, `fusarium_wilt`, `healthy`, `verticillium_wilt`; 1472 / 318 / 314 images). The class list is read from the folder names, never hard-coded. To run the study on another dataset with the same layout, use `--data-dir`.
+The comparative study is configured for the downloaded PlantVillage 15-class dataset in `backend/data/images_15/{train,validation,test}/<class>/` (fixed seed 42, leaf-group-aware 70/15/15 split: 15,950 / 3,422 / 3,415 images). The downloaded archive and prepared images are intentionally Git-ignored. To download and prepare the dataset on a new machine, run `tools/download_plantvillage_15.py` and `tools/prepare_plantvillage_15_split.py` from the repository root. The class list is read from the folder names, never hard-coded. To run the study on another dataset with the same layout, use `--data-dir`.
 
-> The deployed model in `backend/artifacts/crop-disease/` is a separate 15-class pepper/potato/tomato classifier whose training data is not in this repository. It is **not** part of the comparison, because a fair comparison needs all four models trained on the same data. In the prediction page it stays available as "MobileNetV2 (deployed, 15 classes)".
+> The deployed MobileNetV2 in `backend/artifacts/crop-disease/` remains available for production inference. The four comparative models, including a separately trained MobileNetV2 baseline, use the same PlantVillage 15-class split so their results are directly comparable.
 
 ### Experimental setup
 
@@ -317,12 +317,12 @@ cd backend
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt -r requirements-comparison.txt
 
 # Train each model (any order; each run updates the comparison)
-.\.venv\Scripts\python.exe -m comparison.train --model mobilenetv2
-.\.venv\Scripts\python.exe -m comparison.train --model efficientnet_b0
-.\.venv\Scripts\python.exe -m comparison.train --model resnet50
-.\.venv\Scripts\python.exe -m comparison.train --model efficientnet_b3
+.\.venv\Scripts\python.exe -m comparison.train --model mobilenetv2 --data-dir data/images_15
+.\.venv\Scripts\python.exe -m comparison.train --model efficientnet_b0 --data-dir data/images_15
+.\.venv\Scripts\python.exe -m comparison.train --model resnet50 --data-dir data/images_15
+.\.venv\Scripts\python.exe -m comparison.train --model efficientnet_b3 --data-dir data/images_15
 # or all four in sequence
-.\.venv\Scripts\python.exe -m comparison.train --model all
+.\.venv\Scripts\python.exe -m comparison.train --model all --data-dir data/images_15
 
 # Re-evaluate saved models on the test set (one model, or all trained models)
 .\.venv\Scripts\python.exe -m comparison.evaluate --model all
@@ -350,7 +350,7 @@ backend/artifacts/comparison/<model>/  # model.keras, labels.txt (weights are gi
 
 ### Using the models in the application
 
-Open `predict.html`, choose a model in the **Model** dropdown, upload a leaf image and analyze it; the result shows the predicted class, confidence and the model used. Models appear in the dropdown as soon as they are trained. The **Model Comparison / Performance Analysis** section at the bottom of the page displays `backend/results/model_comparison.json` and the generated graphs. API additions: `GET /api/models`, `GET /api/models/comparison`, and an optional `model` form field on `POST /api/predictions` (`default`, `mobilenetv2`, `efficientnet_b0`, `resnet50`, `efficientnet_b3`). Set `COMPARISON_CROP_NAME` if your study dataset is not cotton.
+Open the root `predict.html`, choose a model in the **Model** dropdown, upload a leaf image and analyze it; the result shows the predicted class, confidence and the model used. Models appear in the dropdown when the API is running and the corresponding trained artifacts exist. The **Model Comparison / Performance Analysis** section displays all four statistical results together. The **Compare One Image Across All Four Models** section sends one uploaded image to all four APIs in parallel; before training, it shows a clearly labelled prototype fallback. API additions: `GET /api/models`, `GET /api/models/comparison`, and an optional `model` form field on `POST /api/predictions` (`default`, `mobilenetv2`, `efficientnet_b0`, `resnet50`, `efficientnet_b3`).
 
 ### Fair-comparison methodology
 
