@@ -271,7 +271,8 @@ function initPredictionEngine() {
             `;
 
             try {
-                const res = await CropSentryApi.predict(selectedFile);
+                const modelSelect = document.getElementById("modelSelect");
+                const res = await CropSentryApi.predict(selectedFile, modelSelect ? modelSelect.value : undefined);
                 const prediction = res.prediction;
 
                 if (laserScan) laserScan.style.display = "none";
@@ -294,6 +295,13 @@ function initPredictionEngine() {
                 const classTypeBadge = document.getElementById("classTypeBadge");
                 if (cropLabel) cropLabel.textContent = `Crop: ${prediction.crop} · ${prediction.type}`;
                 if (classTypeBadge) classTypeBadge.textContent = prediction.type;
+                const modelUsedLabel = document.getElementById("resultModelUsed");
+                if (modelUsedLabel && prediction.model) {
+                    const timing = typeof prediction.inferenceMs === "number"
+                        ? ` · ${prediction.inferenceMs.toFixed(0)} ms inference`
+                        : "";
+                    modelUsedLabel.textContent = `Model used: ${prediction.model.name}${timing}`;
+                }
                 const confBar = document.getElementById("confidenceProgress");
                 const confText = document.getElementById("confidenceText");
                 if (confBar) confBar.style.width = `${Math.min(prediction.confidence, 100)}%`;
@@ -474,21 +482,21 @@ function initLeafComparison() {
 
 /* ================= 5. DISEASE ENCYCLOPEDIA & MODEL CLASS CARDS ================= */
 const diseaseSampleImages = {
-    Pepper__bell___Bacterial_spot: "assets/imgs/model-samples/Pepper__bell___Bacterial_spot.jpg",
-    Pepper__bell___healthy: "assets/imgs/model-samples/Pepper__bell___healthy.jpg",
-    Potato___Early_blight: "assets/imgs/model-samples/Potato___Early_blight.jpg",
-    Potato___Late_blight: "assets/imgs/model-samples/Potato___Late_blight.jpg",
-    Potato___healthy: "assets/imgs/model-samples/Potato___healthy.jpg",
-    Tomato_Bacterial_spot: "assets/imgs/model-samples/Tomato_Bacterial_spot.jpg",
-    Tomato_Early_blight: "assets/imgs/model-samples/Tomato_Early_blight.jpg",
-    Tomato_Late_blight: "assets/imgs/model-samples/Tomato_Late_blight.jpg",
-    Tomato_Leaf_Mold: "assets/imgs/model-samples/Tomato_Leaf_Mold.jpg",
-    Tomato_Septoria_leaf_spot: "assets/imgs/model-samples/Tomato_Septoria_leaf_spot.jpg",
-    Tomato_Spider_mites_Two_spotted_spider_mite: "assets/imgs/model-samples/Tomato_Spider_mites_Two_spotted_spider_mite.jpg",
-    Tomato__Target_Spot: "assets/imgs/model-samples/Tomato__Target_Spot.jpg",
-    Tomato__Tomato_YellowLeaf__Curl_Virus: "assets/imgs/model-samples/Tomato__Tomato_YellowLeaf__Curl_Virus.svg",
-    Tomato__Tomato_mosaic_virus: "assets/imgs/model-samples/Tomato__Tomato_mosaic_virus.svg",
-    Tomato_healthy: "assets/imgs/model-samples/Tomato_healthy.svg"
+    Pepper__bell___Bacterial_spot: "imgs/model-samples/Pepper__bell___Bacterial_spot.jpg",
+    Pepper__bell___healthy: "imgs/model-samples/Pepper__bell___healthy.jpg",
+    Potato___Early_blight: "imgs/model-samples/Potato___Early_blight.jpg",
+    Potato___Late_blight: "imgs/model-samples/Potato___Late_blight.jpg",
+    Potato___healthy: "imgs/model-samples/Potato___healthy.jpg",
+    Tomato_Bacterial_spot: "imgs/model-samples/Tomato_Bacterial_spot.jpg",
+    Tomato_Early_blight: "imgs/model-samples/Tomato_Early_blight.jpg",
+    Tomato_Late_blight: "imgs/model-samples/Tomato_Late_blight.jpg",
+    Tomato_Leaf_Mold: "imgs/model-samples/Tomato_Leaf_Mold.jpg",
+    Tomato_Septoria_leaf_spot: "imgs/model-samples/Tomato_Septoria_leaf_spot.jpg",
+    Tomato_Spider_mites_Two_spotted_spider_mite: "imgs/model-samples/Tomato_Spider_mites_Two_spotted_spider_mite.jpg",
+    Tomato__Target_Spot: "imgs/model-samples/Tomato__Target_Spot.jpg",
+    Tomato__Tomato_YellowLeaf__Curl_Virus: "imgs/model-samples/Tomato__Tomato_YellowLeaf__Curl_Virus.svg",
+    Tomato__Tomato_mosaic_virus: "imgs/model-samples/Tomato__Tomato_mosaic_virus.svg",
+    Tomato_healthy: "imgs/model-samples/Tomato_healthy.svg"
 };
 const illustratedDiseaseSamples = new Set([
     "Tomato__Tomato_YellowLeaf__Curl_Virus",

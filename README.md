@@ -69,18 +69,17 @@ Prediction works without signing in. The current 15-class model output is not ma
 | Tests and linting | Jest, Supertest, ESLint |
 | Optional container orchestration | Docker Compose |
 
-There is no root-level package installation or frontend compilation step. The repository root is the canonical frontend for this project: use `predict.html`, `api.js`, `main.js`, `model-comparison.js`, and `side-by-side-comparison.js` from the root. The `frontend/` directory is a legacy duplicate and is not the page used by the current prototype. External page libraries are loaded from CDNs and therefore need network access in the browser.
+There is no root-level package installation or frontend compilation step. The `frontend/` directory is the single canonical frontend for this project. Use `frontend/predict.html`, `frontend/assets/js/api.js`, `frontend/assets/js/main.js`, `frontend/assets/js/model-comparison.js`, and `frontend/assets/js/side-by-side-comparison.js`. The old root-level duplicate frontend files have been removed. External page libraries are loaded from CDNs and therefore need network access in the browser.
 
 ## Project structure
 
 ```text
 .
-|-- index.html, predict.html, dashboard.html, ...  # Website pages
-|-- style.css                                      # Shared styles
-|-- disease.css, login.css                        # Page-specific styles
-|-- main.js, api.js, auth.js                       # Shared UI/API/auth helpers
-|-- login.js, chatbot.js, motion-effects.js, ...   # Focused browser features
-|-- imgs/                                          # Site imagery
+|-- frontend/                                     # Canonical static website
+|   |-- index.html, predict.html, dashboard.html, ...
+|   |-- assets/css/                               # Shared and page-specific styles
+|   |-- assets/js/                                # UI, API, auth, comparison scripts
+|   `-- assets/imgs/                               # Site imagery
 `-- backend/
     |-- src/
     |   |-- app.js, server.js                      # Express app and server
@@ -99,7 +98,7 @@ There is no root-level package installation or frontend compilation step. The re
 
 - Windows 10/11 with PowerShell
 - Node.js 22 or newer and npm (the backend uses Node's built-in `node:sqlite` API)
-- Python 3.10 (recommended for the pinned TensorFlow 2.15.1 dependency)
+- Python 3.11 (required for the pinned TensorFlow 2.15.1 dependency; Python 3.10 also works)
 - A modern browser
 - Git is optional if you already have the project files
 
@@ -108,7 +107,7 @@ Check the installed runtimes:
 ```powershell
 node --version
 npm --version
-py -3.10 --version
+py -3.11 --version
 ```
 
 ## Run locally on Windows
@@ -117,11 +116,11 @@ Run the static website and API in **two separate PowerShell terminals**.
 
 ### 1. Start the website
 
-In Terminal 1, serve the repository root (do not open the HTML files directly):
+In Terminal 1, serve the `frontend/` directory (do not open the HTML files directly):
 
 ```powershell
-cd "C:\VS Code\project"
-py -3.10 -m http.server 8000
+cd "C:\VS Code\project\frontend"
+py -3.11 -m http.server 8000
 ```
 
 ### 2. Install and start the API
@@ -132,7 +131,7 @@ In Terminal 2:
 cd "C:\VS Code\project\backend"
 npm ci
 Copy-Item .env.example .env
-py -3.10 -m venv .venv
+py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install --upgrade pip
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
@@ -234,7 +233,7 @@ npm run lint
 
 The Jest/Supertest suite covers authentication, prediction endpoint behavior, upload validation, and model metadata. The model metadata test reads the checked-in labels and evaluation reports; endpoint prediction tests mock model inference.
 
-For a manual end-to-end check, keep both servers running, open `predict.html`, and submit a JPG, PNG, or WEBP photo of a supported crop leaf. Confirm the browser console and API terminal do not report new errors.
+For a manual end-to-end check, keep both servers running, open `frontend/predict.html`, and submit a JPG, PNG, or WEBP photo of a supported crop leaf. Confirm the browser console and API terminal do not report new errors.
 
 You can also check the API and submit an image from a third PowerShell terminal:
 
@@ -331,7 +330,7 @@ cd backend
 .\.venv\Scripts\python.exe -m comparison.compare
 
 # Run the application (two terminals, as described above)
-python -m http.server 8000      # repository root
+python -m http.server 8000      # frontend directory
 npm run dev                     # backend
 ```
 
@@ -350,7 +349,7 @@ backend/artifacts/comparison/<model>/  # model.keras, labels.txt (weights are gi
 
 ### Using the models in the application
 
-Open the root `predict.html`, choose a model in the **Model** dropdown, upload a leaf image and analyze it; the result shows the predicted class, confidence and the model used. Models appear in the dropdown when the API is running and the corresponding trained artifacts exist. The **Model Comparison / Performance Analysis** section displays all four statistical results together. The **Compare One Image Across All Four Models** section sends one uploaded image to all four APIs in parallel; before training, it shows a clearly labelled prototype fallback. API additions: `GET /api/models`, `GET /api/models/comparison`, and an optional `model` form field on `POST /api/predictions` (`default`, `mobilenetv2`, `efficientnet_b0`, `resnet50`, `efficientnet_b3`).
+Open `frontend/predict.html`, choose a model in the **Model** dropdown, upload a leaf image and analyze it; the result shows the predicted class, confidence and the model used. Models appear in the dropdown when the API is running and the corresponding trained artifacts exist. The **Model Comparison / Performance Analysis** section displays all four statistical results together. The **Compare One Image Across All Four Models** section sends one uploaded image to all four APIs in parallel; before training, it shows a clearly labelled prototype fallback. API additions: `GET /api/models`, `GET /api/models/comparison`, and an optional `model` form field on `POST /api/predictions` (`default`, `mobilenetv2`, `efficientnet_b0`, `resnet50`, `efficientnet_b3`).
 
 ### Fair-comparison methodology
 
