@@ -11,7 +11,7 @@
         { id: "mobilenetv2", name: "MobileNetV2" },
         { id: "efficientnet_b0", name: "EfficientNet-B0" },
         { id: "resnet50", name: "ResNet50" },
-        { id: "efficientnet_b3", name: "EfficientNet-B3" }
+        { id: "mobilenetv3", name: "MobileNetV3-Large" }
     ];
     let selectedFile = null;
 

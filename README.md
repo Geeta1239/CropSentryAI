@@ -270,7 +270,7 @@ Ordered from lightweight to heavy. All four use ImageNet-pretrained backbones th
 | 1 | **MobileNetV2** | Depthwise-separable convolutions, inverted residuals, linear bottlenecks | ~2.3 M parameters | The project's existing baseline | Fastest and smallest, so it suits mobile and edge use; usually the lowest capacity |
 | 2 | **EfficientNet-B0** | MBConv blocks with squeeze-and-excitation, compound-scaled | ~4.0 M parameters | Modern efficient network, still lightweight | Often better accuracy per parameter than MobileNetV2; slower on CPU because of the extra operations |
 | 3 | **ResNet50** | 50-layer residual network with bottleneck blocks | ~23.6 M parameters | Classic, widely cited medium/heavy baseline | Robust features and a standard reference; large and slow with no accuracy-per-parameter advantage |
-| 4 | **EfficientNet-B3** | Deeper, wider EfficientNet (native 300 x 300) | ~10.8 M parameters | Heavier member of the efficient family | Highest capacity of the efficient models; slowest to train and run, and run below its native resolution by default (see limitations) |
+| 4 | **MobileNetV3-Large** | Modern lightweight MobileNet backbone | ~3.25 M backbone parameters | Updated mobile architecture | Compact model with Keras-native preprocessing and a strong efficiency/accuracy trade-off |
 
 \* Backbone only (no ImageNet classifier). The exact counts for the full classifiers (backbone + the shared head) are measured and written to `backend/results/model_comparison.csv`.
 
@@ -297,7 +297,7 @@ All settings live in `backend/comparison/study_config.json` and are identical fo
 | Augmentation | Random horizontal flip, rotation 0.08, zoom 0.1 (training only) |
 | Class imbalance | Balanced class weights computed from the training split |
 
-Each model applies the preprocessing its ImageNet weights expect inside the model: MobileNetV2 scales to [-1, 1] (same as `predict.py`), ResNet50 uses BGR mean-centring, and the Keras EfficientNets normalise internally. The data pipeline is shared.
+Each model applies the preprocessing its ImageNet weights expect inside the model: MobileNetV2 scales to [-1, 1] (same as `predict.py`), ResNet50 uses BGR mean-centring, and Keras EfficientNet/MobileNetV3 backbones normalise internally. The data pipeline is shared.
 
 ### Metrics
 
@@ -319,7 +319,7 @@ cd backend
 .\.venv\Scripts\python.exe -m comparison.train --model mobilenetv2 --data-dir data/images_15
 .\.venv\Scripts\python.exe -m comparison.train --model efficientnet_b0 --data-dir data/images_15
 .\.venv\Scripts\python.exe -m comparison.train --model resnet50 --data-dir data/images_15
-.\.venv\Scripts\python.exe -m comparison.train --model efficientnet_b3 --data-dir data/images_15
+.\.venv\Scripts\python.exe -m comparison.train --model mobilenetv3 --data-dir data/images_15
 # or all four in sequence
 .\.venv\Scripts\python.exe -m comparison.train --model all --data-dir data/images_15
 
@@ -349,19 +349,19 @@ backend/artifacts/comparison/<model>/  # model.keras, labels.txt (weights are gi
 
 ### Using the models in the application
 
-Open `frontend/predict.html`, choose a model in the **Model** dropdown, upload a leaf image and analyze it; the result shows the predicted class, confidence and the model used. Models appear in the dropdown when the API is running and the corresponding trained artifacts exist. The **Model Comparison / Performance Analysis** section displays all four statistical results together. The **Compare One Image Across All Four Models** section sends one uploaded image to all four APIs in parallel; before training, it shows a clearly labelled prototype fallback. API additions: `GET /api/models`, `GET /api/models/comparison`, and an optional `model` form field on `POST /api/predictions` (`default`, `mobilenetv2`, `efficientnet_b0`, `resnet50`, `efficientnet_b3`).
+Open `frontend/predict.html`, choose a model in the **Model** dropdown, upload a leaf image and analyze it; the result shows the predicted class, confidence and the model used. Models appear in the dropdown when the API is running and the corresponding trained artifacts exist. The **Model Comparison / Performance Analysis** section displays all four statistical results together. The **Compare One Image Across All Four Models** section sends one uploaded image to all four APIs in parallel; before training, it shows a clearly labelled prototype fallback. API additions: `GET /api/models`, `GET /api/models/comparison`, and an optional `model` form field on `POST /api/predictions` (`default`, `mobilenetv2`, `efficientnet_b0`, `resnet50`, `mobilenetv3`).
 
 ### Fair-comparison methodology
 
-Use one fixed split and test set, the same class order, seed, input size, batch size, optimizer, learning rate, loss, augmentation, class weights and early-stopping rule for all four models, and the same hardware for the timing measurements. Report macro-F1 alongside accuracy because the classes are imbalanced, and report training time together with the device it ran on. If you also run EfficientNet-B3 at its native 300 x 300 (`--img-size 300 --results-dir results_b3_300 --artifacts-dir artifacts/comparison_b3_300`), present it as a separate, clearly labelled experiment.
+Use one fixed split and test set, the same class order, seed, input size, batch size, optimizer, learning rate, loss, augmentation, class weights and early-stopping rule for all four models, and the same hardware for the timing measurements. Report macro-F1 alongside accuracy because the classes are imbalanced, and report training time together with the device it ran on. MobileNetV3-Large is evaluated at the common 224 x 224 input size.
 
 ### Limitations
 
 - Results depend on the hardware: timings from a CPU and a GPU are not comparable.
 - The backbone is frozen (matching the existing baseline), so the study measures feature quality for transfer learning, not full fine-tuning.
 - The test set is small (314 images) and imbalanced (`curl_virus` has only 4 test images), so per-class scores and small accuracy gaps are statistically weak; one seed per model gives no variance estimate. Repeat with several `--seed` values if you need confidence intervals.
-- EfficientNet-B3 runs at 224 x 224 instead of its native 300 x 300 so that all models see identical input.
-- Training on CPU is slow, especially ResNet50 and EfficientNet-B3; a GPU is strongly recommended.
+- MobileNetV3-Large is evaluated at 224 x 224 so that all four models see identical input.
+- Training on CPU is slow, especially ResNet50; a GPU is strongly recommended.
 - The legacy `train_model.py` uses `Rescaling(scale=2.0, offset=-1.0)` on 0-255 pixels; the study instead uses the correct [-1, 1] scaling that `predict.py` already applies. `train_model.py` itself was left unchanged.
 
 ## Docker note

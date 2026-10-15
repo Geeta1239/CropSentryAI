@@ -1,3 +1,4 @@
 Model,Parameters,Trainable Parameters,Model Size (MB),Accuracy,Precision (macro),Recall (macro),F1 (macro),F1 (weighted),Training Time (s),Epochs Run,Inference (ms/image),Throughput (img/s),Input Size,Batch Size,Epochs (max),Optimizer,Learning Rate,Loss,Device
 EfficientNet-B0,4381362,331791,19.9730,0.9482,0.9337,0.9490,0.9386,0.9487,3942.2188,16,259.5068,42.0404,224,32,30,adam,0.0010,categorical_crossentropy,CPU
 ResNet50,24116111,528399,96.6030,0.9426,0.9355,0.9456,0.9393,0.9433,6643.4051,14,189.5570,33.6030,224,32,30,adam,0.0010,categorical_crossentropy,CPU
+MobileNetV3-Large,3246223,249871,15.0400,0.9449,0.9311,0.9517,0.9402,0.9455,1464.1254,10,190.8029,65.9148,224,32,30,adam,0.0010,categorical_crossentropy,CPU

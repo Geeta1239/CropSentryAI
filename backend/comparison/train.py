@@ -3,7 +3,7 @@
     python -m comparison.train --model mobilenetv2
     python -m comparison.train --model efficientnet_b0
     python -m comparison.train --model resnet50
-    python -m comparison.train --model efficientnet_b3
+    python -m comparison.train --model mobilenetv3
     python -m comparison.train --model all
 
 Every run: loads the shared dataset -> builds the model through the factory -> trains with

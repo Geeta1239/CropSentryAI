@@ -136,7 +136,7 @@ describe("comparative-study model selection", () => {
 
         expect(response.status).toBe(200);
         expect(response.body.models.map(model => model.id)).toEqual([
-            "default", "mobilenetv2", "efficientnet_b0", "resnet50", "efficientnet_b3"
+            "default", "mobilenetv2", "efficientnet_b0", "resnet50", "mobilenetv3"
         ]);
     });
 });

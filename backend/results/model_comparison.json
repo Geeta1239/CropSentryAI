@@ -45,6 +45,29 @@
       "learning_rate": 0.001,
       "loss": "categorical_crossentropy",
       "device_used": "CPU"
+    },
+    {
+      "model": "MobileNetV3-Large",
+      "key": "mobilenetv3",
+      "total_parameters": 3246223,
+      "trainable_parameters": 249871,
+      "model_size_mb": 15.04,
+      "accuracy": 0.9449487554904832,
+      "macro_precision": 0.9311450887949005,
+      "macro_recall": 0.9517371558255499,
+      "macro_f1": 0.9401832885148339,
+      "weighted_f1": 0.9455065022692613,
+      "training_time_seconds": 1464.1254005019982,
+      "epochs_run": 10,
+      "avg_inference_ms_per_image": 190.80290114012314,
+      "throughput_images_per_second": 65.91480325628096,
+      "img_size": 224,
+      "batch_size": 32,
+      "epochs_configured": 30,
+      "optimizer": "adam",
+      "learning_rate": 0.001,
+      "loss": "categorical_crossentropy",
+      "device_used": "CPU"
     }
   ],
   "class_names": [
