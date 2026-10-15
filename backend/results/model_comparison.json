@@ -1,6 +1,29 @@
 {
   "models": [
     {
+      "model": "EfficientNet-B0",
+      "key": "efficientnet_b0",
+      "total_parameters": 4381362,
+      "trainable_parameters": 331791,
+      "model_size_mb": 19.973,
+      "accuracy": 0.9481698389458272,
+      "macro_precision": 0.9337465939181119,
+      "macro_recall": 0.948958046154733,
+      "macro_f1": 0.938607269285244,
+      "weighted_f1": 0.9486954348481571,
+      "training_time_seconds": 3942.2188053299997,
+      "epochs_run": 16,
+      "avg_inference_ms_per_image": 259.50680642996304,
+      "throughput_images_per_second": 42.040428044672666,
+      "img_size": 224,
+      "batch_size": 32,
+      "epochs_configured": 30,
+      "optimizer": "adam",
+      "learning_rate": 0.001,
+      "loss": "categorical_crossentropy",
+      "device_used": "CPU"
+    },
+    {
       "model": "ResNet50",
       "key": "resnet50",
       "total_parameters": 24116111,
