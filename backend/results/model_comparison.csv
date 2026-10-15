@@ -1,0 +1,2 @@
+Model,Parameters,Trainable Parameters,Model Size (MB),Accuracy,Precision (macro),Recall (macro),F1 (macro),F1 (weighted),Training Time (s),Epochs Run,Inference (ms/image),Throughput (img/s),Input Size,Batch Size,Epochs (max),Optimizer,Learning Rate,Loss,Device
+ResNet50,24116111,528399,96.6030,0.9426,0.9355,0.9456,0.9393,0.9433,6643.4051,14,189.5570,33.6030,224,32,30,adam,0.0010,categorical_crossentropy,CPU
